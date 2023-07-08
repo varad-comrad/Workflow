@@ -5,3 +5,13 @@
 
 import subprocess
 import argparse
+
+class PythonProject:
+    pass
+
+class JavaProject:
+    pass
+
+class JSProj:
+    pass
+
