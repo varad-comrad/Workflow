@@ -7,7 +7,7 @@ def main():
     args = parser.parse_args()
 
     subprocess.run('git add .', cwd='.', shell=True)
-    subprocess.run(f'git commit -am {args.args}', cwd='.', shell=True)
+    subprocess.run(f'git commit -m {args.args}', cwd='.', shell=True)
     subprocess.run(f'git push -u origin {args.branch}', cwd='.', shell=True)
 
 if __name__ == '__main__':
