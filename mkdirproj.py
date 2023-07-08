@@ -14,7 +14,6 @@ import errors
 #     deactivate_command = "conda deactivate"
 #     subprocess.run(deactivate_command, shell=True)
 
-#encapsulates all functions declared above. Receives parser.parse_args() in __init__
 class Project:
     def __init__(self, parser_args: argparse.Namespace)-> None:
         self.args = parser_args
@@ -29,17 +28,14 @@ class Project:
         except FileExistsError:
             if input("Project with that name already exists. Do you wish to open it(Y/N) ").lower() != "y":
                 return None
+        if self.args.git:
+            self.__initialize_git(dirpath_aux)
         return dirpath_aux
     
     def vscode_proj(self):
         if (dir := self.__project_dir()) is None:
             return
-        # debug needed
-        # if self.args.new_py_venv:
-        #     try:
-        #         subprocess.run(f'pyproject . pyvenv-{self.name}',shell=True, cwd = dir)
         subprocess.run(f'code .', shell=True, cwd=dir)
-        pass
 
     # def jupyter_proj(self, env_name: str):
     #     dir = self.__project_dir()
@@ -69,33 +65,19 @@ class Project:
     def vim_project(self):
         pass
 
-    def __java_proj(self):
-        pass
-    
-    def __rust_proj(self, name: str, path: pathlib.Path):
-        # subprocess.run(f'cargo new {name}', shell=True, cwd=path)
-        pass
-
-    def __data_science_proj(self):
-        pass
-
     def __initialize_git(self, path: pathlib.Path):
-        # subprocess.run('git init', shell=True, cwd=path)
-        pass
+        subprocess.run('git init', shell=True, cwd=path)
 
 
 # add choices to text-editor arg
 def parse_project():
+    text_editors = ['vscode', 'vim', 'jupyter']
     parser = argparse.ArgumentParser(usage=errors.newproj_error())
     parser.add_argument('-n', '--name',required=True, type=str)
-    parser.add_argument('-t', '--text-editor',required=True, type=str)
+    parser.add_argument('-t', '--text-editor',required=True, choices=text_editors)
     parser.add_argument('-d', '--dir', type=str, default=settings.default_dir)
-    parser.add_argument('-e', '--conda-env', type=str)
-    parser.add_argument('--new-proj',default=False, action="store_true")
-    parser.add_argument('--new-py-venv',default=False, action="store_true")
-    parser.add_argument('-j','--java-proj',default=False)
-    parser.add_argument('-r','--rust-proj',default=False)
-    parser.add_argument('-g','--git',default=True)
+    parser.add_argument('--new-proj', default=False, action="store_true")
+    parser.add_argument('-g','--git', default=False, action="store_true")
     return parser.parse_args()
 
 if __name__ == '__main__':
