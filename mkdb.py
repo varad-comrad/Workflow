@@ -29,12 +29,27 @@ class DatabaseCreator:
         conf.mkdir()
         models = self._dir.joinpath('models')
         models.mkdir()
-        
+
         self._dir.joinpath('requirements.txt').touch()
         self._dir.joinpath('create_main.py').touch()
         conf.joinpath('db_session.py').touch()
         models.joinpath('__all_models.py').touch()
         models.joinpath('model_base.py').touch()
+
+        def create_mongodb(self):
+            pass
+
+        def create_postgre(self):
+            pass
+
+        def create_mysql(self):
+            pass
+
+        def create_microsoft(self):
+            pass
+
+        def create_surreal(self):
+            pass
 
 if __name__ == '__main__':
     DatabaseCreator(parse_args()).create_sqlite()
