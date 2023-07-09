@@ -29,7 +29,7 @@ class PyProject:
         match settings.venv_manager:
             case 'virtualenv':
                 subprocess.run(f"virtualenv --python=python{self.args.python_version} '{self.args.set_new_env[0]}'", cwd='.', shell=True)
-                subprocess.run(f". {self.args.set_new_env[0]}/bin/activate", cwd='.', shell=True)
+                # subprocess.run(f"source {self.args.set_new_env[0]}/bin/activate", cwd='.', shell=True)
             case 'conda':
                 pass
             case 'poetry':
@@ -46,7 +46,7 @@ class PyProject:
         self.__new_venv()
 
     def __install_version(self):
-        pass
+        subprocess.run(f'pyenv install {self.args.python_version}', shell=True, cwd='.')
 
     def choose_version(self):
         pass
