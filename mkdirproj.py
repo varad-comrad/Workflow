@@ -78,10 +78,10 @@ def parse_project():
     parser.add_argument('-d', '--dir', type=str, default=settings.default_dir)
     parser.add_argument('--new-proj', default=False, action="store_true")
     parser.add_argument('-g','--git', default=False, action="store_true")
-    return parser
+    return parser.parse_args()
 
 def main():
-    proj = Project(parse_project().parse_args())
+    proj = Project(parse_project())
     if proj.args.text_editor == 'vscode':
         proj.vscode_proj()
     
