@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 
 from typing import Any
-import argparse
-import subprocess
-import pathlib
-import shutil
-import settings
-import errors
+import argparse, subprocess, pathlib, shutil, settings, errors
 
 
 # def deactivate_conda_environment():
@@ -26,10 +21,20 @@ class Project:
         try:
             dirpath_aux.mkdir(parents=True)
         except FileExistsError:
-            if input("Project with that name already exists. Do you wish to open it(Y/N) ").lower() != "y":
+            if i:=input("Project with that name already exists. Do you wish to open it(Y/N) ").lower() == "y":
+                return dirpath_aux
+            elif i == 'n':
                 return None
-        if self.args.git:
+            else:
+                raise ValueError("Unexpected result")
+        
+        if self.args.git_clone and self.args.new_proj:
+            self.__git_clone(dirpath_aux)
+            dirpath_aux = list(dirpath_aux.iterdir())[0]
+
+        if self.args.git and not self.args.git_clone and self.args.new_proj:
             self.__initialize_git(dirpath_aux)
+        
         return dirpath_aux
     
     def vscode_proj(self):
@@ -68,6 +73,10 @@ class Project:
     def __initialize_git(self, path: pathlib.Path):
         subprocess.run('git init', shell=True, cwd=path)
 
+    def __git_clone(self, path: pathlib.Path):
+        subprocess.run(f'git clone {self.args.git_clone}', shell=True, cwd=path)
+        
+
 
 # add choices to text-editor arg
 def parse_project():
@@ -78,10 +87,11 @@ def parse_project():
     parser.add_argument('-d', '--dir', type=str, default=settings.default_dir)
     parser.add_argument('--new-proj', default=False, action="store_true")
     parser.add_argument('-g','--git', default=False, action="store_true")
-    return parser.parse_args()
+    parser.add_argument('-gc', '--git-clone', type=str, default=False)
+    return parser
 
 def main():
-    proj = Project(parse_project())
+    proj = Project(parse_project().parse_args())
     if proj.args.text_editor == 'vscode':
         proj.vscode_proj()
     

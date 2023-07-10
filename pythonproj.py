@@ -7,14 +7,14 @@ def parse_pyproject():
     # requires pyenv to manage python versions
     parser.add_argument('-p','--python-version', type=str, required=True)
     
-    parser.add_argument('--force-install', default=False, action='store_true')
+    parser.add_argument('-f','--force-install', default=False, action='store_true')
     # force installation of python version if not present.
     # like previous, requires pyenv.
     
     parser.add_argument('-e', '--environment', nargs=1, type=str)
     # path to env.
 
-    parser.add_argument('-s', '--set-new-env', nargs=2, default=False)
+    parser.add_argument('-s', '--set-new-env', nargs='+', default=False)
     # if user wishes to set new environment. If specified, argument must be the name of the venv and the path to requirements.txt
     # for pip installation. Second argument is optional. Tool for managing may be conda or poetry or virtualenv.
     # Defined in settings.py
@@ -23,7 +23,9 @@ def parse_pyproject():
 
 class PyProject:
     def __init__(self, parsed_args: argparse.Namespace):
-        self.args = parsed_args    
+        if len(parsed_args.set_new_env) > 2:
+            raise ValueError('Set new environment must have at most 2 arguments') # change error type later
+        self.args = parsed_args
 
     def __new_venv(self):
         match settings.venv_manager:
@@ -49,7 +51,10 @@ class PyProject:
         subprocess.run(f'pyenv install {self.args.python_version}', shell=True, cwd='.')
 
     def choose_version(self):
-        pass
+        res = subprocess.check_output('pyenv versions', shell=True, cwd='.')
+        if self.args.python_version not in res and self.args.force_install:
+            self.__install_version()
+        subprocess.run(f'pyenv local {self.args.python_version}', shell=True, cwd='.')
 
 
 def main():
