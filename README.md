@@ -21,7 +21,18 @@ Names:
 - workflow java => javaproj.py
 - workflow rust => rustproj.py
 
-Eventually projects will also be created through their kind (data science, web app, API development, etc)
-Possibly will become a vscode extension as well
-Possibly manage .NET projects as well
-Possibly (unlikely) manage C/C++ projects
+Others: 
+- Eventually projects will also be created through their kind (data science, web app, API development, etc)
+- Possibly will become a vscode extension as well
+- Possibly manage .NET/Node projects as well
+- Possibly (unlikely) manage C/C++ projects
+- Study possibility of integration with docker
+- Study possibility of auto-installing pyenv, if not yet installed
+
+
+## REQUIREMENTS:
+
+- Python3.10+
+- For Python projects:
+    - virtaulenv (conda or poetry in the future)
+    - pyenv
