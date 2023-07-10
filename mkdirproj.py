@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from typing import Any
-import argparse, subprocess, pathlib, shutil, settings, errors
+import argparse, subprocess, pathlib, shutil, settings, errors, sys
 
 
 # def deactivate_conda_environment():
@@ -30,11 +30,12 @@ class Project:
         
         if self.args.git_clone and self.args.new_proj:
             self.__git_clone(dirpath_aux)
-            dirpath_aux = list(dirpath_aux.iterdir())[0]
+            dirpath_aux = list(dirpath_aux.iterdir())[0] # check if necessary
 
         if self.args.git and not self.args.git_clone and self.args.new_proj:
             self.__initialize_git(dirpath_aux)
         
+        self.dirpath = dirpath_aux
         return dirpath_aux
     
     def vscode_proj(self):
@@ -94,7 +95,8 @@ def main():
     proj = Project(parse_project().parse_args())
     if proj.args.text_editor == 'vscode':
         proj.vscode_proj()
-    
+    sys.exit(proj.dirpath)
+
 
 if __name__ == '__main__':
     main()
