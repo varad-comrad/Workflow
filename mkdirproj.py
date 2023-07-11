@@ -43,29 +43,15 @@ class Project:
             return
         subprocess.run(f'code .', shell=True, cwd=dir)
 
-    # def jupyter_proj(self, env_name: str):
-    #     dir = self.__project_dir()
-    #     try:
-    #         # run is not working. Cannot activate conda env, shell is not recognized by conda
-              # conda_name = self.args.env_name
-    #         subprocess.run(f'conda init zsh && conda activate {env_name} && jupyter notebook', shell=True,
-    #                                 cwd=dir)
-        # except AttributeError:
-            # print("ERROR: Conda environment not specified")
-            # return 
-        # except KeyboardInterrupt:
-        #     exit_jupyter_proj()
+    def jupyter_proj(self):
+        dir = self.__project_dir()
+        try:
+            subprocess.run(f'jupyter notebook', shell=True, cwd=dir)
+        except KeyboardInterrupt:
+            self.exit_jupyter_proj()
 
-    # def exit_jupyter_proj():
-    #    process_command = "jupyter notebook list"
-    #    process_output = subprocess.check_output(
-    #        process_command, shell=True, text=True)
-    #    process_lines = process_output.strip().split("\n")
-    #    if len(process_lines) <= 1:
-    #        return
-    #    process_info = process_lines[1].split()
-    #    pid = process_info[0]
-    #    subprocess.run(f"kill {pid}", shell=True)
+    def exit_jupyter_proj(self):
+       subprocess.run('jupyter notebook stop -y', shell=True)
 
     # development needed
     def vim_project(self):
@@ -95,6 +81,10 @@ def main():
     proj = Project(parse_project().parse_args())
     if proj.args.text_editor == 'vscode':
         proj.vscode_proj()
+    elif proj.args.text_editor == 'jupyter':
+        proj.jupyter_proj()
+    elif proj.args.text_editor == 'vim':
+        pass
     sys.exit(proj.dirpath)
 
 

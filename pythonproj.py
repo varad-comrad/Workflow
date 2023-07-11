@@ -11,7 +11,7 @@ def parse_pyproject():
     # force installation of python version if not present.
     # like previous, requires pyenv.
     
-    parser.add_argument('-e', '--environment', nargs=1, type=str)
+    parser.add_argument('-e', '--env', nargs=1, type=str)
     # path to env.
 
     parser.add_argument('-s', '--set-new-env', nargs='+', default=False)
