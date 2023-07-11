@@ -28,7 +28,7 @@ Others:
 - Possibly (unlikely) manage C/C++ projects
 - Study possibility of integration with docker
 - Study possibility of auto-installing pyenv, if not yet installed
-
+- Consider making classes more API-ish for better customization
 
 ## REQUIREMENTS:
 
