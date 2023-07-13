@@ -4,7 +4,7 @@ import argparse
 import pathlib
 
 
-def parse_args():
+def db_parser():
 
     databases: list[str] = ['sqlite', 'mongodb', 'postgre', 'mysql', 'microsoftsql'] 
 
@@ -15,10 +15,10 @@ def parse_args():
     parser.add_argument('-d', '--dir', default='.', type=str)
 
 
-    return parser.parse_args()
+    return parser
 
 class DatabaseCreator:
-    def __init__(self, parsed_args: argparse.Namespace) -> None:
+    def __init__(self, parsed_args: argparse.ArgumentParser) -> None:
         self._db: str = parsed_args.database
         self._dir: pathlib.Path = pathlib.Path(parsed_args.dir)
         self._dir = self._dir.joinpath(f'{parsed_args.args[0]}')
@@ -45,13 +45,14 @@ class DatabaseCreator:
         def create_mysql(self):
             pass
 
-        def create_microsoft(self):
+        def create_microsoft_sql(self):
             pass
 
         def create_surreal(self):
             pass
+        
 
 if __name__ == '__main__':
-    DatabaseCreator(parse_args()).create_sqlite()
+    DatabaseCreator(db_parser().parse_args()).create_sqlite()
 
         

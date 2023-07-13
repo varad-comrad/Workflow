@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import argparse, subprocess, pathlib, settings
+import argparse, subprocess, pathlib, settings, sys
 # from mkdirproj import *
 
 def parse_pyproject():
@@ -19,10 +19,10 @@ def parse_pyproject():
     # for pip installation. Second argument is optional. Tool for managing may be conda or poetry or virtualenv.
     # Defined in settings.py
 
-    return parser.parse_args()
+    return parser
 
 class PyProject:
-    def __init__(self, parsed_args: argparse.Namespace):
+    def __init__(self, parsed_args: argparse.ArgumentParser):
         if parsed_args.set_new_env and len(parsed_args.set_new_env) > 2:
             raise ValueError('Set new environment must have at most 2 arguments') # change error type later
         self.args = parsed_args
@@ -54,8 +54,12 @@ class PyProject:
     def __choose_preexisting_venv(self):
         match settings.venv_manager:
             case 'virtualenv':
+                self.return_value = f"{self.args.env}/bin/activate"
                 pass
+                # subprocess.run(f'source {self.args.env}/bin/activate', shell=True)
             case 'conda':
+                self.return_value = f'conda activate {self.args.env}'
+                # subprocess.run(f'conda activate {self.args.env}', shell=True)
                 pass
             case 'poetry':
                 pass
@@ -79,7 +83,9 @@ class PyProject:
 
 
 def main():
-    proj = PyProject(parse_pyproject()).choose_version().choose_venv()
+    # proj = PyProject(parse_pyproject()).choose_version().choose_venv()
+    proj = PyProject(parse_pyproject().parse_args()).choose_venv()
+    sys.exit(proj.return_value)
 
 
 

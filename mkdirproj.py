@@ -3,12 +3,6 @@
 from typing import Any
 import argparse, subprocess, pathlib, shutil, settings, errors, sys
 
-
-# def deactivate_conda_environment():
-#     # Deactivate the current conda environment
-#     deactivate_command = "conda deactivate"
-#     subprocess.run(deactivate_command, shell=True)
-
 class Project:
     def __init__(self, parser_args: argparse.Namespace)-> None:
         self.args = parser_args
@@ -86,6 +80,7 @@ def main():
     elif proj.args.text_editor == 'vim':
         pass
     sys.exit(proj.dirpath)
+    
 
 
 if __name__ == '__main__':

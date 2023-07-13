@@ -17,12 +17,6 @@ function lvpgam(){
 	cd -
 }
 
-function pyproject(){
-	cd $1
-	virtualenv $2
-	source $2/bin/activate
-}
-
 function reset_commit() {
   local commit_number=${1:-"1"}
   local commit_reference="HEAD~$commit_number"
@@ -30,13 +24,10 @@ function reset_commit() {
   git reset --hard "$commit_hash"
 }
 
-
-function new_vscode_project(){
-  local directory_name=$1
-  local directory_home=$2
-  cd ~
-  cd $directory_home
-  mkdir $directory_name
-  cd $directory_name
-  code .
-}
+# function workflow(){
+# 	local arg=$1
+# 	if [[$arg -eq "create"]]
+# 	then
+# 		mkdirproj.py 
+# 	fi 
+# }

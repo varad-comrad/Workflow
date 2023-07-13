@@ -11,6 +11,10 @@ Primary goal for now: create mkproj, mkdirproj and mkdb so that it is possible t
     - Placing a file and passing it as a second argument to '-s' will automatically pip install the contents of the file
 - javaproj, rustproj and mkproj are in progress. mkproj is likely getting deleted in the future
 
+## TODO:
+
+- Figure out how to activate a venv with a python script
+
 ## FUTURE:
 All scripts calls will eventually be centralized in a single script called 'workflow', which will also be used to change settings 
 
