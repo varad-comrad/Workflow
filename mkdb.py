@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import argparse, pathlib, dbsettings, subprocess
+import argparse, pathlib, dbsettings, subprocess, settings
 
 
 def db_parser():
@@ -11,11 +11,11 @@ def db_parser():
     parser.add_argument('args', type=str, nargs=1)
     parser.add_argument('-db', '--database', required=True, type=str, choices=databases)
     parser.add_argument('-d', '--dir', default='.', type=str)
-    parser.add_argument('-U', '--user', type=str)
+    parser.add_argument('-U', '--user', type=str, default=settings.db_username)
     parser.add_argument('-pwd', '--password', type=str)
     parser.add_argument('-n', '--database-name', required=True, type=str)
     parser.add_argument('-p', '--port', type=int, default=None)
-    parser.add_argument('-P', '--path-to-sqlite', type=str, default='db/database')
+    parser.add_argument('-P', '--path-to-sqlite', type=str, default=settings.path_to_sqlite)
 
     return parser
 
@@ -33,8 +33,8 @@ class DatabaseCreator:
         models = self._dir/'models'
         models.mkdir()
 
-        with self._dir.joinpath('requirements.txt').open('wb') as requirements_file:
-            requirements_file.write(subprocess.check_output('pip freeze', shell=True))
+        # with self._dir.joinpath('requirements.txt').open('wb') as requirements_file:
+        #     requirements_file.write(subprocess.check_output('pip freeze', shell=True))
         with self._dir.joinpath('create_main.py').open('w') as create_main_file:
             create_main_file.write(dbsettings.create_main)
         with conf.joinpath('db_session.py').open('w') as db_session_file:
@@ -42,7 +42,7 @@ class DatabaseCreator:
                                                                self._db, 
                                                                self._parsed_args.user, 
                                                                self._parsed_args.password,
-                                                               dbsettings.databases_ports[self._db], 
+                                                               self._parsed_args.port or dbsettings.databases_ports[self._db], 
                                                                self._parsed_args.database_name))
         models.joinpath('__all_models.py').touch()
         with models.joinpath('model_base.py').open('w') as model_base_file:
