@@ -1,5 +1,4 @@
-db_session = '''
-import sqlalchemy as sa
+db_session = '''import sqlalchemy as sa
 from sqlalchemy.future.engine import Engine
 from sqlalchemy.orm import sessionmaker, Session
 import pathlib
@@ -12,9 +11,9 @@ def create_engine(sqlite: bool=False, postgresql: bool=False) -> Engine:
     if __engine:
         return __engine
     if sqlite:
-        path = pathlib.Path('{}/{}.sqlite') #! variable here
+        path = pathlib.Path('{}.sqlite') #! variable here
         path.parent.mkdir(parents=True, exist_ok=True) 
-        conn_str = f'sqlite:///' + path
+        conn_str = f'sqlite:///' + str(path.absolute())
         __engine = sa.create_engine(url=conn_str, echo=False)
     elif postgresql:
         conn_str = '{}://{}:{}@localhost:{}/{}'  # ! variable here
@@ -40,14 +39,12 @@ def create_tables() -> None:
 
 '''
 
-model_base = '''
-import sqlalchemy.ext.declarative as decl
+model_base = '''import sqlalchemy.ext.declarative as decl
 
 ModelBase = decl.declarative_base()
 '''
 
-create_main='''
-from conf.db_session import create_tables
+create_main='''from conf.db_session import create_tables
 
 
 if __name__ == '__main__':

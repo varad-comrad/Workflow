@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import argparse, pathlib, dbsettings, subprocess
 
 
@@ -15,34 +14,36 @@ def db_parser():
     parser.add_argument('-U', '--user', type=str)
     parser.add_argument('-pwd', '--password', type=str)
     parser.add_argument('-n', '--database-name', required=True, type=str)
+    parser.add_argument('-p', '--port', type=int, default=None)
+    parser.add_argument('-P', '--path-to-sqlite', type=str, default='db/database')
 
     return parser
 
 class DatabaseCreator:
-    def __init__(self, parsed_args: argparse.ArgumentParser) -> None:
+    def __init__(self, parsed_args: argparse.Namespace) -> None:
         self._db: str = parsed_args.database
-        self._dir: pathlib.Path = pathlib.Path(parsed_args.dir)
-        self._dir = self._dir.joinpath(f'{parsed_args.args[0]}')
+        self._dir: pathlib.Path = pathlib.Path(
+            parsed_args.dir)/f'{parsed_args.args[0]}'
         self._dir.mkdir(parents=True)
+        self._parsed_args = parsed_args
 
     def create_database(self):
-        conf = self._dir.joinpath('conf') 
+        conf = self._dir/'conf' 
         conf.mkdir()
-        models = self._dir.joinpath('models')
+        models = self._dir/'models'
         models.mkdir()
 
-        with self._dir.joinpath('requirements.txt').open('w') as requirements_file:
-            pass
+        with self._dir.joinpath('requirements.txt').open('wb') as requirements_file:
+            requirements_file.write(subprocess.check_output('pip freeze', shell=True))
         with self._dir.joinpath('create_main.py').open('w') as create_main_file:
             create_main_file.write(dbsettings.create_main)
         with conf.joinpath('db_session.py').open('w') as db_session_file:
-            db_session_file.write(dbsettings.db_session.format('something',
-                                                                'other stuff',
-                                                                self._db, 
-                                                                'user', 
-                                                                'password', 
-                                                                dbsettings.databases_ports[self._db], 
-                                                                'namedb'))
+            db_session_file.write(dbsettings.db_session.format(self._parsed_args.path_to_sqlite,
+                                                               self._db, 
+                                                               self._parsed_args.user, 
+                                                               self._parsed_args.password,
+                                                               dbsettings.databases_ports[self._db], 
+                                                               self._parsed_args.database_name))
         models.joinpath('__all_models.py').touch()
         with models.joinpath('model_base.py').open('w') as model_base_file:
             model_base_file.write(dbsettings.model_base)
