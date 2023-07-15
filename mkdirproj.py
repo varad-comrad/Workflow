@@ -1,9 +1,15 @@
 #!/usr/bin/env python
 
+# TODO: Convert multiple text editors methods to a single one using a dictionary
 from typing import Any
 import argparse, subprocess, pathlib, shutil, settings, errors, sys
 
 class Project:
+    command = {
+        'vscode': 'code',
+        'pycharm': 'pycharm-community',
+        'vim': 'vim'
+    }
     def __init__(self, parser_args: argparse.Namespace)-> None:
         self.args = parser_args
         self.dirpath: pathlib.Path = pathlib.Path(self.args.dir)
@@ -32,11 +38,6 @@ class Project:
         self.dirpath = dirpath_aux
         return dirpath_aux
     
-    def vscode_proj(self):
-        if (dir := self.__project_dir()) is None:
-            return
-        subprocess.run(f'code .', shell=True, cwd=dir)
-
     def jupyter_proj(self):
         dir = self.__project_dir()
         try:
@@ -47,9 +48,10 @@ class Project:
     def exit_jupyter_proj(self):
        subprocess.run('jupyter notebook stop -y', shell=True)
 
-    # development needed
-    def vim_project(self):
-        pass
+    def open_proj(self):
+        if (dir := self.__project_dir()) is None:
+            return
+        subprocess.run(f'{self.command[self.args.text_editor]} .', shell=True, cwd=dir)
 
     def __initialize_git(self, path: pathlib.Path):
         subprocess.run('git init', shell=True, cwd=path)
@@ -73,12 +75,10 @@ def parse_project():
 
 def main():
     proj = Project(parse_project().parse_args())
-    if proj.args.text_editor == 'vscode':
-        proj.vscode_proj()
-    elif proj.args.text_editor == 'jupyter':
+    if proj.args.text_editor == 'jupyter':
         proj.jupyter_proj()
-    elif proj.args.text_editor == 'vim':
-        pass
+    else:
+        proj.open_proj()
     sys.exit(proj.dirpath)
     
 

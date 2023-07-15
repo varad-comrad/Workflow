@@ -1,8 +1,9 @@
 
-import json
+import json, pathlib
 
 if __name__ == 'settings':
-    with open('settings.json') as settings_file:
+    path = pathlib.Path(__file__)
+    with path.parent.joinpath('settings.json').open('r') as settings_file:
         s = json.load(settings_file)
     default_dir = s['default_dir']
     default_branch = s['default_branch']
