@@ -9,13 +9,14 @@ def db_parser() -> argparse.ArgumentParser:
     parser: argparse.ArgumentParser = argparse.ArgumentParser()
     
     parser.add_argument('args', type=str, nargs=1)
-    parser.add_argument('-db', '--database', required=True, type=str) # choices=databases
+    parser.add_argument('-b', '--database', required=True, type=str) # choices=databases
     parser.add_argument('-d', '--dir', default='.', type=str)
     parser.add_argument('-U', '--user', type=str, default=settings.db_username)
-    parser.add_argument('-pwd', '--password', type=str, default=settings.db_password)
+    parser.add_argument('-k', '--password', type=str, default=settings.db_password)
     parser.add_argument('-n', '--database-name', required=True, type=str)
     parser.add_argument('-p', '--port', type=int, default=None)
     parser.add_argument('-P', '--path-to-sqlite', type=str, default=settings.path_to_sqlite)
+    parser.add_argument('-H', '--host', type=str, default=settings.default_db_host)
 
     return parser
 
@@ -32,6 +33,7 @@ class DatabaseCreator:
         conf.mkdir()
         models = self._dir/'models'
         models.mkdir()
+        self.__create_sqlite_db()
 
         # with self._dir.joinpath('requirements.txt').open('wb') as requirements_file:
         #     requirements_file.write(subprocess.check_output('pip freeze', shell=True))
@@ -42,12 +44,22 @@ class DatabaseCreator:
                                                                self._db, 
                                                                self._parsed_args.user, 
                                                                self._parsed_args.password,
+                                                               self._parsed_args.host,
                                                                self._parsed_args.port or dbsettings.databases_ports[self._db], 
                                                                self._parsed_args.database_name)
                                                                )
         models.joinpath('__all_models.py').touch()
         with models.joinpath('model_base.py').open('w') as model_base_file:
             model_base_file.write(dbsettings.model_base)
+
+    def __create_sqlite_db(self) -> None:
+        if self._db != 'sqlite':
+            return
+        path: pathlib.Path = self._dir / (self._parsed_args.path_to_sqlite)
+        if path.exists():
+            return
+        path.parent.mkdir()
+        path.touch()
 
 
 if __name__ == '__main__':

@@ -11,12 +11,12 @@ def create_engine(sqlite: bool=False, postgresql: bool=False) -> Engine:
     if __engine:
         return __engine
     if sqlite:
-        path = pathlib.Path('{}.sqlite') #! variable here
+        path = pathlib.Path('{}') #! variable here
         path.parent.mkdir(parents=True, exist_ok=True) 
         conn_str = f'sqlite:///' + str(path)
         __engine = sa.create_engine(url=conn_str, echo=False)
     elif postgresql:
-        conn_str = '{}://{}:{}@localhost:{}/{}'  # ! variable here
+        conn_str = '{}://{}:{}@{}:{}/{}'  # ! variable here
         __engine = sa.create_engine(url=conn_str, echo=False)
     return __engine
 
