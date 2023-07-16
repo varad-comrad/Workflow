@@ -22,7 +22,7 @@ def parse_pyproject():
     return parser
 
 class PyProject:
-    def __init__(self, parsed_args: argparse.ArgumentParser):
+    def __init__(self, parsed_args: argparse.Namespace):
         if parsed_args.set_new_env and len(parsed_args.set_new_env) > 2:
             raise ValueError('Set new environment must have at most 2 arguments') # change error type later
         self.args = parsed_args
@@ -39,9 +39,9 @@ class PyProject:
 
         path = pathlib.Path(f'./{self.args.set_new_env[1]}')
         if path.exists():
-            self.__pip_install()
+            self.__package_install()
 
-    def __pip_install(self):
+    def __package_install(self):
         match settings.venv_manager:
             case 'virtualenv':
                 subprocess.run(

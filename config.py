@@ -15,7 +15,7 @@ def make_parser() -> argparse.ArgumentParser:
     return parser
 
 def type_treating(key: str, value: str | int) -> tuple: 
-    if key == 'db_port':
+    if key in ['db_port']:
         value = int(value)
     return key, value
 
