@@ -24,6 +24,11 @@ function reset_commit() {
   git reset --hard "$commit_hash"
 }
 
+function workon(){
+	local p=$1
+	source $1/bin/activate
+}
+
 # function workflow(){
 # 	local arg=$1
 # 	if [[$arg -eq "create"]]
