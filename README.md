@@ -1,4 +1,4 @@
-# simple-scripts (WIP)
+# Workflow (WIP)
 simple scripts to automatize some works in zsh
 
 Primary goal for now: create mkproj, mkdirproj and mkdb so that it is possible to generate any software dev/data scientist project in 3 shell commands. The projects will always be modularized
@@ -16,6 +16,9 @@ Primary goal for now: create mkproj, mkdirproj and mkdb so that it is possible t
 - Figure out how to activate a venv with a python script
 
 ## FUTURE:
+
+Calling 'workflow' by itself will create a new workflow shell, where all commands are executed. Possible solution for the issues related to  venv initialization
+
 All scripts calls will eventually be centralized in a single script called 'workflow', which will also be used to change settings 
 
 Names:
@@ -33,6 +36,8 @@ Others:
 - Study possibility of integration with docker
 - Study possibility of auto-installing pyenv, if not yet installed
 - Consider making classes more API-ish for better customization
+
+Longer Future: explore possibilitites like AI helper, integration with other CLI tools, etc.
 
 ## REQUIREMENTS:
 

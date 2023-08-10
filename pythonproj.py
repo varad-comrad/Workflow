@@ -2,6 +2,8 @@
 import argparse, subprocess, pathlib, settings, sys
 # from mkdirproj import *
 
+# TODO: offer default packages for certain venvs (django flask and fastAPI for web, numpy pandas etc. for data science, so on) 
+
 def parse_pyproject():
     parser = argparse.ArgumentParser()
     # requires pyenv to manage python versions
@@ -15,7 +17,7 @@ def parse_pyproject():
     # path to env.
 
     parser.add_argument('-s', '--set-new-env', nargs='+', default=False)
-    # if user wishes to set new environment. If specified, argument must be the name of the venv and the path to requirements.txt
+    # if user wishes to set new environment. If specified, arguments must be the name of the venv and the path to requirements.txt
     # for pip installation. Second argument is optional. Tool for managing may be conda or poetry or virtualenv.
     # Defined in settings.py
 
@@ -36,8 +38,10 @@ class PyProject:
                 pass
             case 'poetry':
                 pass
-
-        path = pathlib.Path(f'./{self.args.set_new_env[1]}')
+        try:
+            path = pathlib.Path(f'./{self.args.set_new_env[1]}')
+        except IndexError:
+            return 
         if path.exists():
             self.__package_install()
 
@@ -54,6 +58,7 @@ class PyProject:
     def __choose_preexisting_venv(self):
         match settings.venv_manager:
             case 'virtualenv':
+                subprocess.Popen(f'source {self.args.env}/bin/activate', shell=True)
                 self.return_value = f"{self.args.env}/bin/activate"
                 pass
                 # subprocess.run(f'source {self.args.env}/bin/activate', shell=True)
@@ -85,7 +90,6 @@ class PyProject:
 def main():
     # proj = PyProject(parse_pyproject()).choose_version().choose_venv()
     proj = PyProject(parse_pyproject().parse_args()).choose_venv()
-    sys.exit(proj.return_value)
 
 
 
