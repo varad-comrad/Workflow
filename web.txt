@@ -1,0 +1,7 @@
+django
+flask
+fastapi
+selenium
+aiofiles
+requests
+beatifulsoup

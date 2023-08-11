@@ -13,7 +13,7 @@ Primary goal for now: create mkproj, mkdirproj and mkdb so that it is possible t
 
 ## TODO:
 
-- Figure out how to activate a venv with a python script
+- Refactor pythonproj entirely
 
 ## FUTURE:
 

@@ -17,10 +17,16 @@ def parse_pyproject():
     # path to env.
 
     parser.add_argument('-s', '--set-new-env', nargs='+', default=False)
+    
+
     # if user wishes to set new environment. If specified, arguments must be the name of the venv and the path to requirements.txt
     # for pip installation. Second argument is optional. Tool for managing may be conda or poetry or virtualenv.
     # Defined in settings.py
 
+    parser.add_argument('--data-science', action='store_true', default=False)
+    
+    parser.add_argument('--web-dev', action='store_true', default=False)
+    
     return parser
 
 class PyProject:
@@ -28,6 +34,7 @@ class PyProject:
         if parsed_args.set_new_env and len(parsed_args.set_new_env) > 2:
             raise ValueError('Set new environment must have at most 2 arguments') # change error type later
         self.args = parsed_args
+        self.extensions = ''
 
     def __new_venv(self):
         match settings.venv_manager:
@@ -41,7 +48,11 @@ class PyProject:
         try:
             path = pathlib.Path(f'./{self.args.set_new_env[1]}')
         except IndexError:
-            return 
+            if self.args.data_science:
+                self.__install_ds_packages()
+            if self.args.web_dev:
+                self.__install_wd_packages()
+
         if path.exists():
             self.__package_install()
 
@@ -54,6 +65,7 @@ class PyProject:
                 pass
             case 'poetry':
                 pass
+
 
     def __choose_preexisting_venv(self):
         match settings.venv_manager:
@@ -80,6 +92,9 @@ class PyProject:
         subprocess.run(f'pyenv install {self.args.python_version}', shell=True, cwd='.')
 
     def choose_version(self):
+        if settings.venv_manager == 'conda':
+            self.extension = self.args.python_version
+            return self
         res = subprocess.check_output('pyenv versions', shell=True, cwd='.')
         if self.args.python_version not in str(res) and self.args.force_install:
             self.__install_version()
