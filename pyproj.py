@@ -33,6 +33,10 @@ class PyProject:
         self.args = parsed_args
         self.cmds: list[str]
 
+
+    #############################################################################
+
+
     def manage_version(self):
         if settings.venv_manager == 'conda':
             return self.__manage_version_conda()
@@ -54,6 +58,10 @@ class PyProject:
         subprocess.run(f'conda create python={self.args.python_version} -n {self.args.set_new_env[0]}', shell=True)
         return self
     
+
+    #############################################################################
+
+    
     def manage_venv(self):
         if settings.venv_manager == 'conda':
             ...
@@ -68,18 +76,14 @@ class PyProject:
     def __choose_preexisting_venv(self):
         match settings.venv_manager:
             case 'virtualenv':
-                subprocess.Popen(
-                    f'source {self.args.env}/bin/activate', shell=True)
-                self.return_value = f"{self.args.env}/bin/activate"
+                #! ############################
                 pass
-                # subprocess.run(f'source {self.args.env}/bin/activate', shell=True)
             case 'conda':
-                self.return_value = f'conda activate {self.args.env}'
-                # subprocess.run(f'conda activate {self.args.env}', shell=True)
+                #! ############################
                 pass
             case 'poetry':
+                #! ############################
                 pass
-
 
     def __new_venv(self):
         match settings.venv_manager:
@@ -87,8 +91,7 @@ class PyProject:
                 subprocess.run(
                     f"virtualenv --python=python{self.args.python_version} '{self.args.set_new_env[0]}'", cwd=self.args.dir, shell=True)
             case 'poetry':
-                # subprocess.run(
-                #     f"virtualenv --python=python{self.args.python_version} '{self.args.set_new_env[0]}'", cwd=self.args.dir, shell=True)
+                #! ############################
                 pass
         try:
             path = pathlib.Path(f'./{self.args.set_new_env[1]}')
@@ -105,15 +108,32 @@ class PyProject:
         match settings.venv_manager:
             case 'virtualenv':
                 subprocess.run(
-                    f'{self.args.set_new_env[0]}/bin/python -m pip install -r {self.args.set_new_env[1]}', cwd='.', shell=True)
+                    f'{self.args.set_new_env[0]}/bin/python -m pip install -r {self.args.set_new_env[1]}', cwd=self.args.dir, shell=True)
             case 'conda':
+                #! ############################
                 pass
             case 'poetry':
+                #! ############################
                 pass
 
 
     def __install_ds_packages(self):
+        #! ############################
         pass
 
     def __install_wd_packages(self):
+        #! ############################
         pass
+
+
+
+
+def main():
+    # proj = PyProject(parse_pyproject()).manage_version().manage_venv()
+    # print(proj.return_code)
+    # proj = PyProject(parse_pyproject().parse_args()).choose_venv()
+    print(settings.venv_manager)
+
+
+if __name__ == '__main__':
+    main()
