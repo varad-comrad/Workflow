@@ -9,7 +9,7 @@ def db_parser() -> argparse.ArgumentParser:
     parser: argparse.ArgumentParser = argparse.ArgumentParser()
     
     parser.add_argument('args', type=str, nargs=1)
-    parser.add_argument('-b', '--database', required=True, type=str) # choices=databases
+    parser.add_argument('-D', '--dbms', required=True, type=str) # choices=databases
     parser.add_argument('-d', '--dir', default='.', type=str)
     parser.add_argument('-U', '--user', type=str, default=settings.db_username)
     parser.add_argument('-k', '--password', type=str, default=settings.db_password)

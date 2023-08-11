@@ -55,15 +55,18 @@ function mkdirproj(){
 }
 
 function workflow(){
-    if [$1 = 'config']; then
+    if [ $1 = 'config' ]; then
         shift
-        python config.py $@ 
-    elif [$1 = 'mkdir']; then
+        python config.py "$@" 
+    elif [ $1 = 'mkdir' ]; then
         shift
-        mkdirproj $@ 
-    elif [$1 = 'python-project']; then
+        mkdirproj "$@" 
+    elif [ $1 = 'python-project' ]; then
         shift
-        pythonproj $@ 
+        pythonproj "$@" 
+    elif  [ $1 = 'mkdb' ]; then
+        shift
+        mkdb "$@" 
     
     fi
 
