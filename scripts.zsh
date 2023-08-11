@@ -29,10 +29,42 @@ function workon(){
 	source $1/bin/activate
 }
 
-# function workflow(){
-# 	local arg=$1
-# 	if [[$arg -eq "create"]]
-# 	then
-# 		mkdirproj.py 
-# 	fi 
-# }
+function pythonproj(){
+    python pythonproj.py $@
+    workon tes
+}
+
+function mkproj(){
+
+}
+
+function javaproj(){
+
+}
+
+function mkdb(){
+    python mkdb.py $@
+}
+
+function push_git(){
+	python push_git.py $@
+}
+
+function mkdirproj(){
+
+}
+
+function workflow(){
+    if [$1 = 'config']; then
+        shift
+        python config.py $@ 
+    elif [$1 = 'mkdir']; then
+        shift
+        mkdirproj $@ 
+    elif [$1 = 'python-project']; then
+        shift
+        pythonproj $@ 
+    
+    fi
+
+}
