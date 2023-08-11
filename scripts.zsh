@@ -29,17 +29,31 @@ function workon(){
 	source $1/bin/activate
 }
 
+function activate_venv(){
+	if [ $1 = 'virtualenv' ]; then
+		shift
+		workon $@
+	elif [ $1 = 'conda' ]; then
+		shift
+		conda activate $@
+	elif [ $1 = 'poetry' ]; then
+		shift
+	fi
+}
+
 function pythonproj(){
-    python pythonproj.py $@
-    workon tes
+	msg=$(python pythonproj.py $@)
+	echo $msg
+    vman=$(echo $msg | grep -oE '[^[:space:]]+$' | tail -n 1)
+    activate_venv $vman tes
 }
 
 function mkproj(){
-
+	python mkproj.py $@
 }
 
 function javaproj(){
-
+	python javaproj.py $@
 }
 
 function mkdb(){
@@ -51,7 +65,7 @@ function push_git(){
 }
 
 function mkdirproj(){
-
+	python mkdirproj.py $@
 }
 
 function workflow(){
@@ -67,7 +81,11 @@ function workflow(){
     elif  [ $1 = 'mkdb' ]; then
         shift
         mkdb "$@" 
+    elif  [ $1 = 'push' ]; then
+        shift
+        push_git "$@" 
     
+
     fi
 
 }

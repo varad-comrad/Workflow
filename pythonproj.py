@@ -90,7 +90,7 @@ class PyProject:
 def main():
     # proj = PyProject(parse_pyproject()).choose_version().choose_venv()
     proj = PyProject(parse_pyproject().parse_args()).choose_venv()
-
+    print(settings.venv_manager)
 
 
 if __name__ == '__main__':
