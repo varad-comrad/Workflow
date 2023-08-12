@@ -91,8 +91,3 @@ function workflow(){
     fi
 
 }
-
-function print() {
-echo $@
-
-}
