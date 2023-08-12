@@ -42,30 +42,30 @@ function activate_venv(){
 }
 
 function pythonproj(){
-	msg=$(python pythonproj.py $@)
+	msg=$(pyproj.py $@)
 	echo $msg
-    vman=$(echo $msg | grep -oE '[^[:space:]]+$' | tail -n 1)
-    activate_venv $vman tes
+    vman=$(echo $msg | tail -n 1)
+    eval $vman
 }
 
 function mkproj(){
-	python mkproj.py $@
+	mkproj.py $@
 }
 
 function javaproj(){
-	python javaproj.py $@
+	javaproj.py $@
 }
 
 function mkdb(){
-    python mkdb.py $@
+    mkdb.py $@
 }
 
 function push_git(){
-	python push_git.py $@
+	push_git.py $@
 }
 
 function mkdirproj(){
-	python mkdirproj.py $@
+	mkdirproj.py $@
 }
 
 function workflow(){
@@ -75,7 +75,7 @@ function workflow(){
     elif [ $1 = 'mkdir' ]; then
         shift
         mkdirproj "$@" 
-    elif [ $1 = 'python-project' ]; then
+    elif [ $1 = 'pythonproj' ]; then
         shift
         pythonproj "$@" 
     elif  [ $1 = 'mkdb' ]; then

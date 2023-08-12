@@ -15,7 +15,7 @@ def parse_pyproject():
     parser.add_argument('-e', '--env', type=str)
     # name of venv (if pyenv or conda) TBD poetry.
 
-    parser.add_argument('-s', '--set-new-env', nargs='+', default=False)
+    parser.add_argument('-s', '--set-new-env', nargs='+', default=[])
 
     parser.add_argument('-d', '--dir', default='.', type=str)
 
@@ -63,7 +63,10 @@ class PyProject:
             f'pyenv install {self.args.python_version}', shell=True, cwd=self.args.dir)
     
     def __manage_version_conda(self):
-        subprocess.run(f'conda create python={self.args.python_version} -n {self.args.set_new_env[0]}', shell=True)
+        res = str(subprocess.check_output(f'conda info --envs', shell=True, cwd=self.args.dir))
+        if self.args.env and self.args.env in res:
+            return self
+        subprocess.run(f'conda create python={self.args.python_version} -n {self.args.set_new_env[0]} -y', shell=True)
         return self
     
 
@@ -71,31 +74,40 @@ class PyProject:
 
     
     def manage_venv(self):
+        if settings.venv_manager == 'poetry':
+            pass
         if self.args.env:
             self.__choose_preexisting_venv()
         elif self.args.set_new_env:
             self.__new_venv()
         return self
 
+    def __poetry_venv_manager(self):
+        subprocess.run(
+            f"poetry new --src {self.args.set_new_env[0]}", shell=True, cwd=self.args.dir)
+        self.__check_dependencies()
+        
+
+
     def __choose_preexisting_venv(self):
         match settings.venv_manager:
             case 'pyenv':
-                self.cmds.append(f'source {self.args.env}/bin/activate')
+                self.cmds.append(f'pyenv activate {self.args.env}')
             case 'conda':
                 self.cmds.append(f'conda activate {self.args.env}')
-            case 'poetry':
-                pass
 
     def __new_venv(self):
         match settings.venv_manager:
             case 'pyenv':
                 subprocess.run(
                     f"pyenv virtualenv {self.args.python_version} '{self.args.set_new_env[0]}'", cwd=self.args.dir, shell=True)
-            case 'poetry':
-                subprocess.run(
-                    f"poetry new --src {self.args.set_new_env[0]}", shell=True, cwd=self.args.dir)
+                self.cmds.append(f'pyenv activate {self.args.set_new_env[0]}')
             case 'conda':
+                self.cmds.append(f'conda activate {self.args.set_new_env[0]}')
                 pass
+        self.__check_dependencies()
+        
+    def __check_dependencies(self):    
         try:
             path = pathlib.Path(f'./{self.args.set_new_env[1]}')
             if path.exists():
@@ -111,13 +123,15 @@ class PyProject:
     def __package_install(self):
         match settings.venv_manager:
             case 'pyenv':
-                #! ############################
+                self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
                 pass
             case 'conda':
                 #! ############################
+                # self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
                 pass
             case 'poetry':
                 #! ############################
+                # self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
                 pass
 
 
@@ -135,9 +149,8 @@ class PyProject:
 
 def main():
     proj = PyProject(parse_pyproject().parse_args()).manage_version().manage_venv()
-    # print(proj.return_code)
+    print(' && '.join(proj.cmds))
     # proj = PyProject(parse_pyproject().parse_args()).choose_venv()
-    print(settings.venv_manager)
 
 
 if __name__ == '__main__':
