@@ -19,6 +19,7 @@ Primary goal for now: create mkproj, mkdirproj and mkdb so that it is possible t
 
 - Drop version requirement if venv manager is conda and arg passed is -e
 - Add .gitignore file when -g is passed to mkdirproj.py and initialize it with '.python-version'
+- Exploit the \_\_main\_\_.py files
 
 ## FUTURE:
 

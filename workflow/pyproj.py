@@ -13,7 +13,7 @@ def parse_pyproject():
     # like previous, requires pyenv.
 
     parser.add_argument('-e', '--env', type=str)
-    # name of venv (if pyenv or conda) TBD poetry.
+    # name of venv (if pyenv or conda) TBA poetry.
 
     parser.add_argument('-s', '--set-new-env', nargs='+', default=[])
 
@@ -84,9 +84,14 @@ class PyProject:
         return self
 
     def __poetry_venv_manager(self):
-        subprocess.run(
-            f"poetry new {settings.s['poetry_extension']} {self.args.set_new_env[0]}", shell=True, cwd=self.args.dir)
-        self.__check_dependencies()
+        if self.args.env is not None:
+            # TODO
+            return self
+        elif self.args.set_new_env:
+            # TODO
+            subprocess.run(
+                f"poetry new {settings.s['poetry_extension']} {self.args.set_new_env[0]}", shell=True, cwd=self.args.dir)
+            self.__check_dependencies()
 
     def __choose_preexisting_venv(self):
         match settings.venv_manager:

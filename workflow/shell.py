@@ -4,7 +4,7 @@ import cmd2, subprocess, colorama, settings
 
 class Shell(cmd2.Cmd):
     
-    prompt = f"{colorama.Fore.BLUE}{subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout.strip()}@{colorama.Fore.GREEN}{subprocess.run('hostname', shell=True, capture_output=True, text=True).stdout.strip()}{colorama.Style.RESET_ALL}: "
+    prompt = f"{colorama.Fore.BLUE}{subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout.strip()}@{colorama.Fore.GREEN}{subprocess.run('hostname', shell=True, capture_output=True, text=True).stdout.strip()}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.BLUE}~{colorama.Style.RESET_ALL}$ "
 
     def do_run(self, arg):
         if settings.s['venv_manager'] == 'poetry':
