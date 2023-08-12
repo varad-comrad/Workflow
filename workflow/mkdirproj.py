@@ -2,7 +2,7 @@
 
 # TODO: Convert multiple text editors methods to a single one using a dictionary
 from typing import Any
-import argparse, subprocess, pathlib, shutil, settings, errors, sys
+import argparse, subprocess, pathlib, shutil, settings, errors
 
 class Project:
     command = {
@@ -79,7 +79,7 @@ def main():
         proj.jupyter_proj()
     else:
         proj.open_proj()
-    sys.exit(proj.dirpath)
+    print(proj.dirpath)
     
 
 

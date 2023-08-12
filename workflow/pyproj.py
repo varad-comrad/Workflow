@@ -123,37 +123,37 @@ class PyProject:
     def __package_install(self):
         match settings.venv_manager:
             case 'pyenv':
-                self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
+                self.cmds.append(f'pyenv exec pip install -r {self.args.set_new_env[1]}')
             case 'conda':
                 self.cmds.append(f'conda install --file {self.args.set_new_env[1]}')
             case 'poetry':
                 #! ############################
-                # self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
+                # self.cmds.append(f'pyenv exec pip install -r {self.args.set_new_env[1]}')
                 pass
 
 
     def __install_ds_packages(self):
         match settings.venv_manager:
             case 'pyenv':
-                self.cmds.append(f'pyenv -m pip install -r {settings.s["home_dir"]}/datascience.txt')
+                self.cmds.append(f'pyenv exec pip install -r {settings.s["home_dir"]}/datascience.txt')
             case 'conda':
                 self.cmds.append(
                     f'conda install --file {settings.s["home_dir"]}/datascience.txt')
             case 'poetry':
                 #! ############################
-                # self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
+                # self.cmds.append(f'pyenv exec pip install -r {self.args.set_new_env[1]}')
                 pass
 
     def __install_wd_packages(self):
         match settings.venv_manager:
             case 'pyenv':
-                self.cmds.append(f"pyenv -m pip install -r {settings.s['home_dir']}/web.txt")
+                self.cmds.append(f"pyenv exec pip install -r {settings.s['home_dir']}/web.txt")
             case 'conda':
                 self.cmds.append(
                     f"conda install --file {settings.s['home_dir']}/web.txt")
             case 'poetry':
                 #! ############################
-                # self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
+                # self.cmds.append(f'pyenv exec pip install -r {self.args.set_new_env[1]}')
                 pass
 
 

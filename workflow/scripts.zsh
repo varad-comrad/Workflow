@@ -56,7 +56,16 @@ function mkdirproj(){
 	mkdirproj.py $@
 }
 
+function activate_shel(){
+    shell.py 
+}
+
 function workflow(){
+
+    if [ $# -eq 0 ]; then
+        activate_shell
+    fi
+
     if [ $1 = 'config' ]; then
         shift
         python config.py "$@" 
@@ -72,8 +81,6 @@ function workflow(){
     elif  [ $1 = 'push' ]; then
         shift
         push_git "$@" 
-    
-
     fi
 
 }
