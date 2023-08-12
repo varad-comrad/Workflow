@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import argparse, subprocess, pathlib, settings, sys
 
 
@@ -12,11 +13,16 @@ def parse_pyproject():
     # like previous, requires pyenv.
 
     parser.add_argument('-e', '--env', type=str)
-    # path to env.
+    # name of venv (if pyenv or conda) TBD poetry.
 
     parser.add_argument('-s', '--set-new-env', nargs='+', default=False)
 
     parser.add_argument('-d', '--dir', default='.', type=str)
+
+    parser.add_argument('--data-science', action='store_true', default=False)
+
+    parser.add_argument('--web-dev', action='store_true', default=False)
+
     # if user wishes to set new environment. If specified, arguments must be the name of the venv and the path to requirements.txt
     # for pip installation. Second argument is optional. Tool for managing may be conda or poetry or virtualenv.
     # Defined in settings.py
@@ -31,10 +37,10 @@ class PyProject:
             raise ValueError(
                 'Set new environment must have at most 2 arguments')
         self.args = parsed_args
-        self.cmds: list[str]
+        self.cmds: list[str] = [f'cd {self.args.dir}']
 
 
-    #############################################################################
+    #?#####################################################################################################################
 
 
     def manage_version(self):
@@ -48,6 +54,8 @@ class PyProject:
         if self.args.python_version not in str(res) and self.args.force_install:
             self.__install_version_pyenv()
         subprocess.run(f'pyenv local {self.args.python_version}', cwd=self.args.dir, shell=True)
+        if settings.venv_manager == 'poetry':
+            self.cmds.append(f'poetry env use {self.args.python_version}')
         return self
 
     def __install_version_pyenv(self):
@@ -59,56 +67,52 @@ class PyProject:
         return self
     
 
-    #############################################################################
+    #?#####################################################################################################################
 
     
     def manage_venv(self):
-        if settings.venv_manager == 'conda':
-            ...
-            return self
-        else:
-            if self.args.env:
-                self.__choose_preexisting_venv()
-            if self.args.set_new_env:
-                self.__new_venv()
-            return self
+        if self.args.env:
+            self.__choose_preexisting_venv()
+        elif self.args.set_new_env:
+            self.__new_venv()
+        return self
 
     def __choose_preexisting_venv(self):
         match settings.venv_manager:
-            case 'virtualenv':
-                #! ############################
-                pass
+            case 'pyenv':
+                self.cmds.append(f'source {self.args.env}/bin/activate')
             case 'conda':
-                #! ############################
-                pass
+                self.cmds.append(f'conda activate {self.args.env}')
             case 'poetry':
-                #! ############################
                 pass
 
     def __new_venv(self):
         match settings.venv_manager:
-            case 'virtualenv':
+            case 'pyenv':
                 subprocess.run(
-                    f"virtualenv --python=python{self.args.python_version} '{self.args.set_new_env[0]}'", cwd=self.args.dir, shell=True)
+                    f"pyenv virtualenv {self.args.python_version} '{self.args.set_new_env[0]}'", cwd=self.args.dir, shell=True)
             case 'poetry':
-                #! ############################
+                subprocess.run(
+                    f"poetry new --src {self.args.set_new_env[0]}", shell=True, cwd=self.args.dir)
+            case 'conda':
                 pass
         try:
             path = pathlib.Path(f'./{self.args.set_new_env[1]}')
+            if path.exists():
+                self.__package_install()
+
         except IndexError:
             if self.args.data_science:
                 self.__install_ds_packages()
             if self.args.web_dev:
                 self.__install_wd_packages()
 
-        if path.exists():
-            self.__package_install()
-
+        
     def __package_install(self):
         match settings.venv_manager:
-            case 'virtualenv':
-                subprocess.run(
-                    f'{self.args.set_new_env[0]}/bin/python -m pip install -r {self.args.set_new_env[1]}', cwd=self.args.dir, shell=True)
+            case 'pyenv':
+                #! ############################
+                pass
             case 'conda':
                 #! ############################
                 pass
@@ -119,6 +123,7 @@ class PyProject:
 
     def __install_ds_packages(self):
         #! ############################
+        
         pass
 
     def __install_wd_packages(self):
@@ -129,7 +134,7 @@ class PyProject:
 
 
 def main():
-    # proj = PyProject(parse_pyproject()).manage_version().manage_venv()
+    proj = PyProject(parse_pyproject().parse_args()).manage_version().manage_venv()
     # print(proj.return_code)
     # proj = PyProject(parse_pyproject().parse_args()).choose_venv()
     print(settings.venv_manager)
