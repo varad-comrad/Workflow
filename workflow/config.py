@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import json, pathlib, argparse, typing
 
 # TODO: limit function to predefined keys
@@ -21,7 +22,7 @@ def type_treating(key: str, value: str | int) -> tuple:
 
 def main():
     parser = make_parser()
-    set_value(*(type_treating(*(parser.args))))
+    set_value(*(type_treating(*(parser.parse_args().args))))
 
 if __name__ == '__main__':
     main()

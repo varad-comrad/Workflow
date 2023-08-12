@@ -14,6 +14,7 @@ Primary goal for now: create mkproj, mkdirproj and mkdb so that it is possible t
 ## TODO:
 
 - Refactor pythonproj entirely
+- Refactor config.py entirely
 - Drop version requirement if venv manager is conda and arg passed is -e
 
 ## FUTURE:

@@ -29,18 +29,6 @@ function workon(){
 	source $1/bin/activate
 }
 
-function activate_venv(){
-	if [ $1 = 'virtualenv' ]; then
-		shift
-		workon $@
-	elif [ $1 = 'conda' ]; then
-		shift
-		conda activate $@
-	elif [ $1 = 'poetry' ]; then
-		shift
-	fi
-}
-
 function pythonproj(){
 	msg=$(pyproj.py $@)
 	echo $msg

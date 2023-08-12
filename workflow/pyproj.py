@@ -66,7 +66,7 @@ class PyProject:
         res = str(subprocess.check_output(f'conda info --envs', shell=True, cwd=self.args.dir))
         if self.args.env and self.args.env in res:
             return self
-        subprocess.run(f'conda create python={self.args.python_version} -n {self.args.set_new_env[0]} -y', shell=True)
+        subprocess.run(f'conda create python={self.args.python_version} -n {self.args.set_new_env[0]} {settings.s["conda_extension"]}', shell=True)
         return self
     
 
@@ -84,7 +84,7 @@ class PyProject:
 
     def __poetry_venv_manager(self):
         subprocess.run(
-            f"poetry new --src {self.args.set_new_env[0]}", shell=True, cwd=self.args.dir)
+            f"poetry new {settings.s['poetry_extension']} {self.args.set_new_env[0]}", shell=True, cwd=self.args.dir)
         self.__check_dependencies()
         
 
@@ -124,11 +124,8 @@ class PyProject:
         match settings.venv_manager:
             case 'pyenv':
                 self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
-                pass
             case 'conda':
-                #! ############################
-                # self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
-                pass
+                self.cmds.append(f'conda install --file {self.args.set_new_env[1]}')
             case 'poetry':
                 #! ############################
                 # self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
@@ -136,13 +133,28 @@ class PyProject:
 
 
     def __install_ds_packages(self):
-        #! ############################
-        
-        pass
+        match settings.venv_manager:
+            case 'pyenv':
+                self.cmds.append(f'pyenv -m pip install -r {settings.s["home_dir"]}/datascience.txt')
+            case 'conda':
+                self.cmds.append(
+                    f'conda install --file {settings.s["home_dir"]}/datascience.txt')
+            case 'poetry':
+                #! ############################
+                # self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
+                pass
 
     def __install_wd_packages(self):
-        #! ############################
-        pass
+        match settings.venv_manager:
+            case 'pyenv':
+                self.cmds.append(f"pyenv -m pip install -r {settings.s['home_dir']}/web.txt")
+            case 'conda':
+                self.cmds.append(
+                    f"conda install --file {settings.s['home_dir']}/web.txt")
+            case 'poetry':
+                #! ############################
+                # self.cmds.append(f'pyenv -m pip install -r {self.args.set_new_env[1]}')
+                pass
 
 
 
