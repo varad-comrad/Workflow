@@ -60,6 +60,10 @@ function activate_shel(){
     shell.py 
 }
 
+function new_function(){
+
+}
+
 function workflow(){
 
     if [ $# -eq 0 ]; then
@@ -81,6 +85,14 @@ function workflow(){
     elif  [ $1 = 'push' ]; then
         shift
         push_git "$@" 
+    elif [ $1 = 'new' ]; then
+        shift
+        new_function "$@"
     fi
+
+}
+
+function print() {
+echo $@
 
 }
