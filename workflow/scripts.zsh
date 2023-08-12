@@ -56,21 +56,19 @@ function mkdirproj(){
 	mkdirproj.py $@
 }
 
-function activate_shel(){
+function activate_shell(){
     shell.py 
 }
 
 function new_function(){
-
+    make_workflow.py $@
 }
 
 function workflow(){
 
     if [ $# -eq 0 ]; then
         activate_shell
-    fi
-
-    if [ $1 = 'config' ]; then
+    elif [ $1 = 'config' ]; then
         shift
         python config.py "$@" 
     elif [ $1 = 'mkdir' ]; then
