@@ -75,7 +75,8 @@ class PyProject:
     
     def manage_venv(self):
         if settings.venv_manager == 'poetry':
-            pass
+            self.__poetry_venv_manager()
+            # self.cmds.append('poetry shell')
         if self.args.env:
             self.__choose_preexisting_venv()
         elif self.args.set_new_env:
@@ -86,8 +87,6 @@ class PyProject:
         subprocess.run(
             f"poetry new {settings.s['poetry_extension']} {self.args.set_new_env[0]}", shell=True, cwd=self.args.dir)
         self.__check_dependencies()
-        
-
 
     def __choose_preexisting_venv(self):
         match settings.venv_manager:

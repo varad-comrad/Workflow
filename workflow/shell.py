@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 
-import cmd2, subprocess, colorama
+import cmd2, subprocess, colorama, settings
 
 class Shell(cmd2.Cmd):
     
     prompt = f"{colorama.Fore.BLUE}{subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout.strip()}@{colorama.Fore.GREEN}{subprocess.run('hostname', shell=True, capture_output=True, text=True).stdout.strip()}{colorama.Style.RESET_ALL}: "
 
     def do_run(self, arg):
-        # subprocess.run(arg, shell=True)
+        if settings.s['venv_manager'] == 'poetry':
+            pass # subprocess.run(['poetry shell', arg], shell=True)
+        else:
+            pass # subprocess.run(arg, shell=True)
         pass
 
     def do_config(self, arg):

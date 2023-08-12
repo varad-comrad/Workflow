@@ -31,7 +31,6 @@ function workon(){
 
 function pythonproj(){
 	msg=$(pyproj.py $@)
-	echo $msg
     vman=$(echo $msg | tail -n 1)
     eval $vman
 }
@@ -70,7 +69,7 @@ function workflow(){
         activate_shell
     elif [ $1 = 'config' ]; then
         shift
-        python config.py "$@" 
+        config.py "$@" 
     elif [ $1 = 'mkdir' ]; then
         shift
         mkdirproj "$@" 
