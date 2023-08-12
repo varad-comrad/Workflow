@@ -10,6 +10,9 @@ class Shell(cmd2.Cmd):
         # subprocess.run(arg, shell=True)
         pass
 
+    def do_config(self, arg):
+        subprocess.run('config.py ' + arg, shell=True)
+
     def do_mkdir(self, arg):
         subprocess.run('mkdirproj.py ' + arg, shell=True)
 
@@ -30,6 +33,9 @@ class Shell(cmd2.Cmd):
     
     def do_clear(self, arg):
         subprocess.run('clear', shell=True)
+    
+    def do_git(self, arg):
+        subprocess.run('git ' + arg, shell=True)
     
     def do_exit(self, arg):
         return True
