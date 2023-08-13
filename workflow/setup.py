@@ -6,7 +6,7 @@ import shutil
 
 def create_workflow_directory() -> pathlib.Path:
 	home = pathlib.Path(
-		f'/home/{subprocess.run("whoami", shell=True,  capture_output=True, text=True).stdout.strip()}')
+		f'/home/{subprocess.run("whoami", shell=True, capture_output=True, text=True).stdout.strip()}')
 	name = '.workflow'
 	while True:
 		try:
@@ -29,7 +29,7 @@ def create_workflow_directory() -> pathlib.Path:
 	for rc in rcs:
 		with rc.open('a') as file:
 			file.write(
-				f'\n\nhome_dir_workflow=~/{name}\nPATH=$PATH: $home_dir_workflow\nsource $home_dir_workflow/scripts.zsh\n\n')
+				f'\n\nhome_dir_workflow=~/{name}\nPATH=$PATH:$home_dir_workflow\nsource $home_dir_workflow/scripts.zsh\n\n')
 	return home/name
 
 
@@ -38,10 +38,13 @@ def move_directory(directory: pathlib.Path, destination: pathlib.Path):
 
 # ask for user input here
 def initial_configs(dir: pathlib.Path):
-	...
+	#! TODO: IMPLEMENT USER INTERACTION HERE!!!!!!!!!!!!!!!!!!!
+	home_dir = subprocess.run(
+		'$home_dir_workflow', shell=True, capture_output=True, text=True).stdout.strip()
 	with (dir/'settings.json').open('w') as f:
 		file = {"default_dir": "", "default_branch": "master", "venv_manager": "pyenv", "db_username": "",
-			"db_password": 0, "path_to_sqlite": "db/data.db", "default_db_host": "localhost", "poetry_extension": "--src", "conda_extension": "-y", "pyenv_extension": ""}
+			"db_password": 0, "path_to_sqlite": "db/data.db", "default_db_host": "localhost", "poetry_extension": "--src", "conda_extension": "-y", "pyenv_extension": "",
+			"home_dir": home_dir}
 		json.dump(file, f)
 
 
@@ -152,8 +155,8 @@ function workflow(){
 def main():
 	path = create_workflow_directory()
 	move_directory(pathlib.Path('.') / 'workflow', path)
-	initial_configs(path)
 	chmod(path)
+	initial_configs(path)
 	create_scripts_sh(path)
 
 if __name__ == '__main__':
