@@ -10,10 +10,15 @@ def initial_configs():
 
 def create_workflow_directory():
 	home = pathlib.Path(f'/home/{subprocess.run("whoami", shell=True)}')
-	try:
-		(home / '.workflow').mkdir(exist_ok=False)
-	except:
-		print("Could not setup workflow, a folder with name .workflow already exists")
+	name = '.workflow'
+	while True:
+		try:
+			(home / name).mkdir(exist_ok=False)
+			break
+		except:
+			print(f"Could not setup workflow, a folder with name {name} already exists")
+			name = input("Write the name you wish for it")
+
 	rcs = []
 	for element in home.iterdir():
 		if element == '.zshrc':
@@ -27,5 +32,14 @@ def create_workflow_directory():
 
 	for rc in rcs:
 		with rc.open('a') as file:
-			rc.write(f'\n\nPATH =$PATH: ~/.workflow/workflow\nsource ~/.workflow/workflow/scripts.zsh\n\n')
+			rc.write(f'\n\nPATH =$PATH: ~/{name}/workflow\nsource ~/{name}/workflow/scripts.zsh\n\n')
 
+def copy_workflow_dir():
+	# Copy the workflow directory from the 'git clone' to the folder .workflow (or other one)
+	pass
+
+def main():
+	pass
+
+if __name__ == '__main__':
+	main()
