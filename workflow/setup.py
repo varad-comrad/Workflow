@@ -15,7 +15,6 @@ def create_workflow_directory() -> pathlib.Path:
 		except:
 			print(f"Could not setup workflow, a folder with name {name} already exists")
 			name = input("Write the name you wish for it: ")
-
 	rcs = []
 	for element in home.iterdir():
 		if element.name == '.zshrc':
@@ -156,7 +155,6 @@ def main():
 	initial_configs(path)
 	chmod(path)
 	create_scripts_sh(path)
-
 
 if __name__ == '__main__':
 	main()
