@@ -4,7 +4,7 @@ import argparse, pathlib, subprocess, settings
 
 def create_bash_function(filepath: pathlib.Path, name: str):
     with filepath.open('r') as f:
-        with open(f"{settings.s['home_dir']}/scripts.zsh", 'a') as script:
+        with open(f"{settings.s['home_dir']}/scripts.sh", 'a') as script:
             script.write("function {}() {{\n".format(name))
             script.write('\n'.join(f.readlines()))
             script.write("\n}\n")

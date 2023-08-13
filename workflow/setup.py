@@ -51,7 +51,7 @@ def chmod(dir: pathlib.Path, mode: int = 777):
 	for element in dir.iterdir():
 		if element.is_dir():
 			chmod(element, mode)
-		element.chmod(mode)
+		subprocess.run(f'sudo chmod {mode} {element.absolute()}', shell=True)
 
 
 def create_scripts_sh(dir: pathlib.Path):
