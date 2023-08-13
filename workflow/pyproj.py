@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import argparse, subprocess, pathlib, settings, sys
+import argparse, subprocess, pathlib, settings
 
 
 def parse_pyproject():
@@ -104,9 +104,10 @@ class PyProject:
                 subprocess.run(
                     f"pyenv virtualenv {self.args.python_version} '{self.args.set_new_env[0]}'", cwd=self.args.dir, shell=True)
                 self.cmds.append(f'pyenv activate {self.args.set_new_env[0]}')
+                self.cmds.append(f'pip install colorama cmd2')
             case 'conda':
                 self.cmds.append(f'conda activate {self.args.set_new_env[0]}')
-                pass
+                self.cmds.append(f'conda install -c conda-forge colorama cmd2 -y')
         self.__check_dependencies()
         
     def __check_dependencies(self):    

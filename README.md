@@ -5,8 +5,18 @@ Also capable of creating new shell functions
 Primary goal for now: create mkproj, mkdirproj and mkdb so that it is possible to generate any software dev/data scientist project in 3 shell commands. The projects will always be modularized
 
 
+## INSTALLATION
+
+On a new terminal, write:
+```shell
+git clone https://github.com/varad-comrad/Workflow
+cd Workflow
+python workflow/setup.py
+```
+
+Now, you can delete the cloned repo and restart the terminal, and workflow will already be functioning properly
+
 ## USAGE (as of now):
-- place the workflow directory in your PATH
 - Calling 'workflow' by itself will create a new workflow shell, where all commands can be executed
 - It is also possible to call 'workflow' with arguments. The possibilities are:
     - workflow mkdir {args} => mkdirproj.py {args}
@@ -18,14 +28,13 @@ Primary goal for now: create mkproj, mkdirproj and mkdb so that it is possible t
 ## TODO:
 
 - Drop version requirement if venv manager is conda and arg passed is -e
-- Add .gitignore file when -g is passed to mkdirproj.py and initialize it with '.python-version'
-- Generation of working tree for python projects (like poetry does)
-- Exploit the \_\_main\_\_.py files
+- Debug auto-install dependencies for venvs (colorama, cmd2)
+- Debug auto-install text_files
 
 ## FUTURE:
 
 - In the future, it will be possible to create projects from other languages like Java and Rust
-- Eventually projects will also be created through their kind (data science, web app, API development, etc)
+- Eventually projects will also be created through their kind (data science, web app, etc)
 - Possibly manage .NET/Node projects as well
 - Possibly manage C/C++ projects
 - Study possibility of integration with docker
@@ -36,7 +45,10 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 ## REQUIREMENTS:
 
 
-- Any Linux Distro<!--.  If you're still using other low level OS, do yourself a favor  -->
+- Any Linux Distro<!--.  If you're still using other low tier OS, do yourself a favor  -->
+- cmd2 Python library
+- colorama Python library
 - Python3.10+
 - For Python projects:
     - pyenv (pyenv-virtualenv), poetry or conda
+
