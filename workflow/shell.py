@@ -14,7 +14,8 @@ def get_shortened_path(path):
 
 class Shell(cmd2.Cmd):
 
-    prompt = f"{colorama.Fore.GREEN}{subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout.strip()}@{colorama.Fore.GREEN}{subprocess.run('hostname', shell=True, capture_output=True, text=True).stdout.strip()}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{get_shortened_path(os.getcwd())}{colorama.Style.RESET_ALL}$ "
+    path = pathlib.Path('.')
+    prompt = f"{colorama.Fore.GREEN}{subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout.strip()}@{colorama.Fore.GREEN}{subprocess.run('hostname', shell=True, capture_output=True, text=True).stdout.strip()}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{get_shortened_path(path.absolute().as_posix())}{colorama.Style.RESET_ALL}$ "
 
     # highlighted_keywords = ['exit', 'mkdb', 'config', 'mkdir',
     #                         'pyproj', 'new', 'push', 'bash', 'clear', 'git']
@@ -40,6 +41,8 @@ class Shell(cmd2.Cmd):
 
     def do_run(self, arg):
         path = pathlib.Path('.')
+        lang = ''
+        aux = path
         for element in path.iterdir():
             if element.is_dir():
                 if (element / '__main__.py').exists():
@@ -85,6 +88,34 @@ class Shell(cmd2.Cmd):
 
     def do_git(self, arg):
         subprocess.run('git ' + arg, shell=True)
+
+    def do_cd(self, arg):
+        self.path /= arg
+        os.chdir(arg)
+        self.prompt = f"{colorama.Fore.GREEN}{subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout.strip()}@{colorama.Fore.GREEN}{subprocess.run('hostname', shell=True, capture_output=True, text=True).stdout.strip()}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{get_shortened_path(self.path.absolute().as_posix())}{colorama.Style.RESET_ALL}$ "
+
+    def do_ls(self, arg):
+        subprocess.run('ls ' + arg, shell=True)
+
+    def do_python(self, arg):
+        subprocess.run('python ' + arg, shell=True)
+
+    def do_cargo(self, arg):
+        subprocess.run('cargo ' + arg, shell=True)
+
+    def do_make(self, arg):
+        subprocess.run('make ' + arg, shell=True)
+
+    def do_cmake(self, arg):
+        subprocess.run('cmake ' + arg, shell=True)
+
+    def do_gcc(self, arg):
+        # TODO: CHECK IF arg IS C++ OR C FILE AND CALL THE CORRECT COMPILER
+        subprocess.run('cmake ' + arg, shell=True)
+
+    def do_java(self, arg):
+        # TODO: A LOT ACTUALLY
+        subprocess.run('cmake ' + arg, shell=True)
 
     def do_exit(self, arg):
         return True
