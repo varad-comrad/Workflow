@@ -98,9 +98,9 @@ function workflow(){
         shift
         resetter "$@"
     elif [ $1 = '-h' ]; then
-        cat advanced_helper.txt
+        cat text_files/advanced_helper.txt
     else
-        cat helper.txt 
+        cat text_files/helper.txt 
     fi
 
 }

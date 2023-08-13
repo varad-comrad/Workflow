@@ -35,6 +35,8 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 
 ## REQUIREMENTS:
 
+
+- Any Linux Distro<!--.  If you're still using other low level OS, do yourself a favor  -->
 - Python3.10+
 - For Python projects:
     - pyenv (pyenv-virtualenv), poetry or conda

@@ -137,10 +137,10 @@ class PyProject:
     def __install_ds_packages(self):
         match settings.venv_manager:
             case 'pyenv':
-                self.cmds.append(f'pyenv exec pip install -r {settings.s["home_dir"]}/datascience.txt')
+                self.cmds.append(f'pyenv exec pip install -r {settings.s["home_dir"]}/text_files/datascience.txt')
             case 'conda':
                 self.cmds.append(
-                    f'conda install --file {settings.s["home_dir"]}/datascience.txt')
+                    f'conda install --file {settings.s["home_dir"]}/text_files/datascience.txt')
             case 'poetry':
                 #! ############################
                 # self.cmds.append(f'pyenv exec pip install -r {self.args.set_new_env[1]}')
@@ -149,10 +149,11 @@ class PyProject:
     def __install_wd_packages(self):
         match settings.venv_manager:
             case 'pyenv':
-                self.cmds.append(f"pyenv exec pip install -r {settings.s['home_dir']}/web.txt")
+                self.cmds.append(
+                    f"pyenv exec pip install -r {settings.s['home_dir']}/text_files/web.txt")
             case 'conda':
                 self.cmds.append(
-                    f"conda install --file {settings.s['home_dir']}/web.txt")
+                    f"conda install --file {settings.s['home_dir']}/text_files/web.txt")
             case 'poetry':
                 #! ############################
                 # self.cmds.append(f'pyenv exec pip install -r {self.args.set_new_env[1]}')
