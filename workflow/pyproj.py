@@ -6,6 +6,8 @@ def parse_pyproject():
     parser = argparse.ArgumentParser()
     # requires pyenv to manage python versions
     parser.add_argument('-p', '--python-version', type=str, required=True)
+    
+    parser.add_argument('-n', '--name', type=str, required=True)
 
     parser.add_argument('-f', '--force-install',
                         default=False, action='store_true')
@@ -84,14 +86,10 @@ class PyProject:
         return self
 
     def __poetry_venv_manager(self):
-        if self.args.env is not None:
-            # TODO
-            return self
-        elif self.args.set_new_env:
-            # TODO
-            subprocess.run(
-                f"poetry new {settings.s['poetry_extension']} {self.args.set_new_env[0]}", shell=True, cwd=self.args.dir)
-            self.__check_dependencies()
+        subprocess.run( 
+            f"poetry new {settings.s['poetry_extension']} {self.args.name}", shell=True, cwd=self.args.dir)
+        # self.__check_dependencies() #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        return self
 
     def __choose_preexisting_venv(self):
         match settings.venv_manager:
@@ -161,10 +159,38 @@ class PyProject:
                 pass
 
 
+    #?#####################################################################################################################
+    
+
+    def create_project_tree(self):
+        if settings.venv_manager == 'poetry':
+            return self
+        return self.__create_project_tree__non_poetry()
+
+    def __create_project_tree__non_poetry(self):
+        path = pathlib.Path(self.args.dir)
+        if path / '.git' in list(path.iterdir()):
+            path2 = path / '.gitignore'
+            with path2.open('w') as file:
+                file.write('.python-version')
+        path /= self.args.name #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        path.mkdir(exist_ok=False)
+        (path / '__main__.py').touch()
+        path /= 'src'
+        path.mkdir()
+        (path / '__init__.py').touch()
+        (path / 'test').mkdir()
+        (path / 'test' / '__init__.py').touch()
+        path /= 'main'
+        path.mkdir()
+        (path / '__init__.py').touch()
+        (path/'main.py').touch()
+        return self
+    
 
 
 def main():
-    proj = PyProject(parse_pyproject().parse_args()).manage_version().manage_venv()
+    proj = PyProject(parse_pyproject().parse_args()).manage_version().manage_venv().create_project_tree()
     print(' && '.join(proj.cmds))
     # proj = PyProject(parse_pyproject().parse_args()).choose_venv()
 

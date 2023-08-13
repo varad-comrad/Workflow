@@ -17,6 +17,14 @@ function lvpgam(){
 	cd -
 }
 
+function resetter(){
+    if [ $1 = 'commit' ]; then
+        shift
+        reset_commit $@
+
+    fi 
+}
+
 function reset_commit() {
   local commit_number=${1:-"1"}
   local commit_reference="HEAD~$commit_number"
@@ -26,6 +34,7 @@ function reset_commit() {
 
 function workon(){
 	local p=$1
+    # TODO: create venv if doesn't exist
 	source $1/bin/activate
 }
 
@@ -85,6 +94,13 @@ function workflow(){
     elif [ $1 = 'new' ]; then
         shift
         new_function "$@"
+    elif [ $1 = 'reset' ]; then
+        shift
+        resetter "$@"
+    elif [ $1 = '-h' ]; then
+        cat advanced_helper.txt
+    else
+        cat helper.txt 
     fi
 
 }
