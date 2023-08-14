@@ -44,13 +44,27 @@ def move_directory(directory: pathlib.Path, destination: pathlib.Path):
 
 # ask for user input here
 def initial_configs(dir: pathlib.Path):
-	#! TODO: IMPLEMENT USER INTERACTION HERE!!!!!!!!!!!!!!!!!!!
+
+	default_dir = input('Enter the absolute path to the default directory: ')
+	default_branch = input('Enter the name of the default branch: ')
+	venv_manager = input("Enter the name of the default Python's venv manager (pyenv, conda or poetry): ")
 	home_dir = subprocess.run(
 		'$home_dir_workflow', shell=True, capture_output=True, text=True).stdout.strip()
+
 	with (dir/'settings.json').open('w') as f:
-		file = {"default_dir": "", "default_branch": "master", "venv_manager": "pyenv", "db_username": "",
-			"db_password": 0, "path_to_sqlite": "db/data.db", "default_db_host": "localhost", "poetry_extension": "--src", "conda_extension": "-y", "pyenv_extension": "",
-			"home_dir": home_dir}
+		file = {
+			"default_dir": default_dir,
+			"default_branch": default_branch, 
+			"venv_manager": venv_manager, 
+			"db_username": "",
+			"db_password": 0, 
+			"path_to_sqlite": "db/data.db", 
+			"default_db_host": "localhost", 
+			"poetry_extension": "--src", 
+			"conda_extension": "-y", 
+			"pyenv_extension": "",
+			"home_dir": home_dir
+		}
 		json.dump(file, f)
 
 

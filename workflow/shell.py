@@ -67,20 +67,20 @@ class Shell(cmd2.Cmd):
                        auto_load_commands = auto_load_commands,)
         subprocess.run('clear', shell=True)
 
-    highlighted_keywords = ['exit', 'mkdb', 'config', 'mkdir',
-                            'pyproj', 'new', 'push', 'bash', 'clear', 'git']
-    colors = {
-        'exit': colorama.Fore.BLUE,
-        'mkdb': colorama.Fore.BLUE,
-        'config': colorama.Fore.BLUE,
-        'mkdir': colorama.Fore.BLUE,
-        'pyproj': colorama.Fore.BLUE,
-        'new': colorama.Fore.BLUE,
-        'push': colorama.Fore.BLUE,
-        'bash': colorama.Fore.BLUE,
-        'clear': colorama.Fore.BLUE,
-        'git': colorama.Fore.BLUE
-    }
+    # highlighted_keywords = ['exit', 'mkdb', 'config', 'mkdir',
+    #                         'pyproj', 'new', 'push', 'bash', 'clear', 'git']
+    # colors = {
+    #     'exit': colorama.Fore.BLUE,
+    #     'mkdb': colorama.Fore.BLUE,
+    #     'config': colorama.Fore.BLUE,
+    #     'mkdir': colorama.Fore.BLUE,
+    #     'pyproj': colorama.Fore.BLUE,
+    #     'new': colorama.Fore.BLUE,
+    #     'push': colorama.Fore.BLUE,
+    #     'bash': colorama.Fore.BLUE,
+    #     'clear': colorama.Fore.BLUE,
+    #     'git': colorama.Fore.BLUE
+    # }
 
     # def precmd(self, statement):
     #     # Apply syntax highlighting to the command if it's a keyword
@@ -91,6 +91,7 @@ class Shell(cmd2.Cmd):
 
 
     def do_run(self, arg):
+        #TODO: Implement a code runner separately
         path = pathlib.Path('.')
         lang = ''
         aux = path
