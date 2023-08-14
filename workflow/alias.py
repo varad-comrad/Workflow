@@ -36,4 +36,4 @@ def main():
     modify_rcs(alias, command)
 
 if __name__ == '__main__':
-     main()
+    main()

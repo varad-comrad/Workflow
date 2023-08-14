@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys, subprocess, pathlib
+import sys, subprocess, pathlib, settings
 
 def venv_lookup(venv_name: str) -> bool:
     return pathlib.Path(venv_name) in pathlib.Path('.').iterdir()
@@ -15,7 +15,10 @@ def main():
             create_venv() 
         print(f'source {venv_name}/bin/activate')    
     except IndexError:
-        pass
+        create_venv(settings.s.get("default_name_venv", "my_venv"))
+        print(
+            f'source {settings.s.get("default_name_venv", "my_venv")}/bin/activate')
+
 
 if __name__ == '__main__':
     main()

@@ -27,7 +27,7 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 
 ## TODO:
 
-- Drop version requirement if venv manager is conda and arg passed is -e
+- Drop version requirement if venv manager is conda and arg -e is passed
 - Debug auto-install dependencies for venvs (colorama, cmd2)
 - Debug auto-install text_files
 - Syntax highlighting for shell.py commands
@@ -47,9 +47,11 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 ## REQUIREMENTS:
 
 
-- Any Linux Distro<!--.  If you're still using other low tier OS, do yourself a favor  -->
+- Any Linux Distro that supports zsh, bash, dash, fish, ksh, csh or tcsh<!--.  If you're still using other low tier OS, do yourself a favor  -->
 - cmd2 Python library (```pip install cmd2```)
 - colorama Python library (```pip install colorama```)
+- click Python library (```pip install click```)
+- prompt toolkit Python library (```pip install prompt_toolkit```)
 - Python3.10+
 - For Python projects:
     - pyenv (pyenv-virtualenv), poetry or conda
