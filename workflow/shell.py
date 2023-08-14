@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import cmd2, os, subprocess, colorama, settings, pathlib
+from typing import Optional, TextIO, List, Iterable, Dict
+from cmd2 import CommandSet
 
 #!!!!!!!!!!!!!!!!!!!!!!!! TODO: MODIFY ALL subprocess.run COMMANDS INCLUDING cwd ARGUMENT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -29,6 +31,45 @@ class Shell(cmd2.Cmd):
                           capture_output=True, text=True).stdout.strip()
     
     prompt = f"{colorama.Fore.GREEN}{user}@{colorama.Fore.GREEN}{host}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{shortened_path(path, user)}{colorama.Style.RESET_ALL}$ "
+
+    def __init__(self, completekey: str = 'tab',
+                 stdin: Optional[TextIO] = None,
+                 stdout: Optional[TextIO] = None,
+                 *,
+                 persistent_history_file: str = '',
+                 persistent_history_length: int = 1000,
+                 startup_script: str = '',
+                 silence_startup_script: bool = False,
+                 include_py: bool = False,
+                 include_ipy: bool = False,
+                 allow_cli_args: bool = True,
+                 transcript_files: Optional[List[str]] = None,
+                 allow_redirection: bool = True,
+                 multiline_commands: Optional[List[str]] = None,
+                 terminators: Optional[List[str]] = None,
+                 shortcuts: Optional[Dict[str, str]] = None,
+                 command_sets: Optional[Iterable[CommandSet]] = None,
+                 auto_load_commands: bool = True,
+                 ) -> None:
+        super().__init__(completekey,
+                       stdin,
+                       stdout,
+                       
+                       persistent_history_file = persistent_history_file,
+                       persistent_history_length = persistent_history_length,
+                       startup_script = startup_script,
+                       silence_startup_script = silence_startup_script,
+                       include_py = include_py,
+                       include_ipy = include_ipy,
+                       allow_cli_args = allow_cli_args,
+                       transcript_files = transcript_files,
+                       allow_redirection = allow_redirection,
+                       multiline_commands = multiline_commands,
+                       terminators = terminators,
+                       shortcuts = shortcuts,
+                       command_sets = command_sets,
+                       auto_load_commands = auto_load_commands,)
+        subprocess.run('clear', shell=True)
 
     # highlighted_keywords = ['exit', 'mkdb', 'config', 'mkdir',
     #                         'pyproj', 'new', 'push', 'bash', 'clear', 'git']
@@ -149,6 +190,7 @@ class Shell(cmd2.Cmd):
         return True
 
 
+
 if __name__ == '__main__':
-    cli = Shell()
+    cli = Shell(shortcuts={':q': 'exit', ':g': 'git'})
     cli.cmdloop()
