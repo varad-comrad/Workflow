@@ -67,8 +67,14 @@ function activate_shell(){
     shell.py 
 }
 
-function new_function(){
-    make_workflow.py $@
+function new_workflow(){
+    if [ $1 = 'function' ]; then
+        shift
+        make_workflow.py "$@"
+    elif [ $1 = 'alias' ]; then
+        shift
+        alias.py "$@"        
+    fi
 }
 
 function workflow(){
@@ -92,7 +98,7 @@ function workflow(){
         push_git "$@" 
     elif [ $1 = 'new' ]; then
         shift
-        new_function "$@"
+        new_workflow "$@" 
     elif [ $1 = 'reset' ]; then
         shift
         resetter "$@"

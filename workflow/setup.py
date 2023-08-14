@@ -81,7 +81,7 @@ function reset_commit() {
 }
 
 function workon(){
-    local p=$(workon.py $@)
+	local p=$(workon.py $@)
 	eval $p
 }
 
@@ -115,8 +115,14 @@ function activate_shell(){
     shell.py 
 }
 
-function new_function(){
-    make_workflow.py $@
+function new_workflow(){
+    if [ $1 = 'function' ]; then
+        shift
+        make_workflow.py "$@"
+    elif [ $1 = 'alias' ]; then
+        shift
+        alias.py "$@"        
+    fi
 }
 
 function workflow(){
@@ -140,17 +146,19 @@ function workflow(){
         push_git "$@" 
     elif [ $1 = 'new' ]; then
         shift
-        new_function "$@"
+        new_workflow "$@" 
     elif [ $1 = 'reset' ]; then
         shift
         resetter "$@"
     elif [ $1 = '-h' ]; then
-        cat "$home_dir_workflow/text_files/advanced_helper.txt"
+        cat text_files/advanced_helper.txt
     else
-        cat "$home_dir_workflow/text_files/helper.txt"
+        cat text_files/helper.txt 
     fi
 
 }
+
+
 '''
 	with (dir/ 'scripts.sh').open('w') as file:
 		file.write(template)
