@@ -50,8 +50,6 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 - Any Linux Distro that supports zsh, bash, dash, fish, ksh, csh or tcsh<!--.  If you're still using other low tier OS, do yourself a favor  -->
 - cmd2 Python library (```pip install cmd2```)
 - colorama Python library (```pip install colorama```)
-- click Python library (```pip install click```)
-- prompt toolkit Python library (```pip install prompt_toolkit```)
 - Python3.10+
 - For Python projects:
     - pyenv (pyenv-virtualenv), poetry or conda

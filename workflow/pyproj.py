@@ -5,7 +5,7 @@ import argparse, subprocess, pathlib, settings
 def parse_pyproject():
     parser = argparse.ArgumentParser()
     # requires pyenv to manage python versions
-    parser.add_argument('-p', '--python-version', type=str, required=True)
+    parser.add_argument('-p', '--python-version', type=str)
     
     parser.add_argument('-n', '--name', type=str, required=True)
 
@@ -38,6 +38,8 @@ class PyProject:
             # change error type later
             raise ValueError(
                 'Set new environment must have at most 2 arguments')
+        if parsed_args.python_version is None and parsed_args.env == [] and settings.s['venv_manager'] != 'conda':
+            raise ValueError("Python version must be specified")
         self.args = parsed_args
         self.cmds: list[str] = [f'cd {self.args.dir}']
 

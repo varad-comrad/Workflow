@@ -110,3 +110,7 @@ function workflow(){
 
 }
 
+function loc() {
+git ls-files | grep $1 | xargs wc -l
+
+}

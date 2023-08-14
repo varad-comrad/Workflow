@@ -4,21 +4,16 @@ import cmd2, os, subprocess, colorama, settings, pathlib
 from typing import Optional, TextIO, List, Iterable, Dict
 from cmd2 import CommandSet
 
-#!!!!!!!!!!!!!!!!!!!!!!!! TODO: MODIFY ALL subprocess.run COMMANDS INCLUDING cwd ARGUMENT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-def get_shortened_path(path):
-    home = os.path.expanduser("~")
-    if path.startswith(home):
-        rel_path = os.path.relpath(path, home)
-        return f"~/{rel_path}" if rel_path else "~"
-    return path
 
 def shortened_path(path: pathlib.Path, user: str):
     ret = path.absolute().as_posix()
-    ret = ret.replace(f'/home/{user}', '~')
+    if ret.startswith(f'/home/{user}'):
+       ret = ret.replace(f'/home/{user}', '~')
     if ret.endswith('..'):
         ret = ret.replace('/..', '')
     return ret
+
 
 class Shell(cmd2.Cmd):
 
@@ -51,6 +46,7 @@ class Shell(cmd2.Cmd):
                  command_sets: Optional[Iterable[CommandSet]] = None,
                  auto_load_commands: bool = True,
                  ) -> None:
+        
         super().__init__(completekey,
                        stdin,
                        stdout,
@@ -71,27 +67,28 @@ class Shell(cmd2.Cmd):
                        auto_load_commands = auto_load_commands,)
         subprocess.run('clear', shell=True)
 
-    # highlighted_keywords = ['exit', 'mkdb', 'config', 'mkdir',
-    #                         'pyproj', 'new', 'push', 'bash', 'clear', 'git']
-    # colors = {
-    #     'exit': colorama.Fore.CYAN,
-    #     'mkdb': colorama.Fore.CYAN,
-    #     'config': colorama.Fore.CYAN,
-    #     'mkdir': colorama.Fore.CYAN,
-    #     'pyproj': colorama.Fore.CYAN,
-    #     'new': colorama.Fore.CYAN,
-    #     'push': colorama.Fore.CYAN,
-    #     'bash': colorama.Fore.CYAN,
-    #     'clear': colorama.Fore.CYAN,
-    #     'git': colorama.Fore.CYAN
-    # }
+    highlighted_keywords = ['exit', 'mkdb', 'config', 'mkdir',
+                            'pyproj', 'new', 'push', 'bash', 'clear', 'git']
+    colors = {
+        'exit': colorama.Fore.BLUE,
+        'mkdb': colorama.Fore.BLUE,
+        'config': colorama.Fore.BLUE,
+        'mkdir': colorama.Fore.BLUE,
+        'pyproj': colorama.Fore.BLUE,
+        'new': colorama.Fore.BLUE,
+        'push': colorama.Fore.BLUE,
+        'bash': colorama.Fore.BLUE,
+        'clear': colorama.Fore.BLUE,
+        'git': colorama.Fore.BLUE
+    }
 
     # def precmd(self, statement):
     #     # Apply syntax highlighting to the command if it's a keyword
     #     if statement.command in self.highlighted_keywords:
-    #         statement.command = self.colorize(
-    #             statement.command, color=colorama.Fore.CYAN)
+    #         color = self.colors.get(statement.command, colorama.Fore.CYAN)
+    #         statement.command = f"{color}{statement.command}{colorama.Style.RESET_ALL}"
     #     return statement
+
 
     def do_run(self, arg):
         path = pathlib.Path('.')
@@ -146,13 +143,12 @@ class Shell(cmd2.Cmd):
     def do_cd(self, arg):
         # TODO: Debug and implement the cases where arg is '-' and '~' and '..'
         prev = self.path
-        if arg == '..':
+        if arg == '..': # TODO: check for the case where arg is '../../something...'. Check loop implementation (for arg in arg.split('/'))
             self.path = self.path.absolute().parent
-            print(self.path)
         elif arg == '-':
             pass
         elif arg == '~':
-            print(pathlib.Path(f'/home/{self.user}'))
+            pass
         else:
             self.path /= arg
         try:
@@ -165,6 +161,9 @@ class Shell(cmd2.Cmd):
 
     def do_ls(self, arg):
         subprocess.run('ls ' + arg, shell=True)
+
+    def do_man(self, arg):
+        pass
 
     def do_python(self, arg):
         subprocess.run('python ' + arg, shell=True)
@@ -187,10 +186,11 @@ class Shell(cmd2.Cmd):
         subprocess.run('cmake ' + arg, shell=True)
 
     def do_exit(self, arg):
+        subprocess.run('clear', shell=True)
         return True
 
 
 
 if __name__ == '__main__':
-    cli = Shell(shortcuts={':q': 'exit', ':g': 'git'})
+    cli = Shell(shortcuts={':q': 'exit', ':g': 'git'}, include_ipy=True)
     cli.cmdloop()
