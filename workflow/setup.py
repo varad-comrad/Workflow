@@ -23,13 +23,19 @@ def create_workflow_directory() -> pathlib.Path:
 			rcs.append(home / '.fishrc')
 		if element.name == '.bashrc':
 			rcs.append(home / '.bashrc')
-		# if element == '.zshrc':
-		# 	rcs.append(home / '.zshrc')
+		if element == '.kshrc':
+			rcs.append(home / '.kshrc')
+		if element == '.cshrc':
+			rcs.append(home / '.cshrc')
+		if element == '.tcshrc':
+			rcs.append(home / '.tcshrc')
+		if element == '.dashrc':
+			rcs.append(home / '.dashrc')
 
 	for rc in rcs:
 		with rc.open('a') as file:
 			file.write(
-				f'\n\nhome_dir_workflow=~/{name}\nPATH=$PATH:$home_dir_workflow\nsource $home_dir_workflow/scripts.zsh\n\n')
+				f'\n\nhome_dir_workflow=~/{name}\nPATH=$PATH:$home_dir_workflow\nsource $home_dir_workflow/scripts.sh\n\n')
 	return home/name
 
 

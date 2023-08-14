@@ -104,10 +104,10 @@ class PyProject:
                 subprocess.run(
                     f"pyenv virtualenv {self.args.python_version} '{self.args.set_new_env[0]}'", cwd=self.args.dir, shell=True)
                 self.cmds.append(f'pyenv activate {self.args.set_new_env[0]}')
-                self.cmds.append(f'pip install colorama cmd2')
+                self.cmds.append(f'pip install colorama cmd2 click')
             case 'conda':
                 self.cmds.append(f'conda activate {self.args.set_new_env[0]}')
-                self.cmds.append(f'conda install -c conda-forge colorama cmd2 -y')
+                self.cmds.append(f'conda install -c conda-forge colorama cmd2 click -y')
         self.__check_dependencies()
         
     def __check_dependencies(self):    
@@ -178,11 +178,11 @@ class PyProject:
         path /= self.args.name #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         path.mkdir(exist_ok=False)
         (path / '__main__.py').touch()
+        (path / 'test').mkdir()
+        (path / 'test' / '__init__.py').touch()
         path /= 'src'
         path.mkdir()
         (path / '__init__.py').touch()
-        (path / 'test').mkdir()
-        (path / 'test' / '__init__.py').touch()
         path /= 'main'
         path.mkdir()
         (path / '__init__.py').touch()
