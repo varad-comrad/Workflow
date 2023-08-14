@@ -81,9 +81,8 @@ function reset_commit() {
 }
 
 function workon(){
-	local p=$1
-    # TODO: create venv if doesn't exist
-	source $1/bin/activate
+    local p=$(workon.py $@)
+	eval $p
 }
 
 function pythonproj(){
