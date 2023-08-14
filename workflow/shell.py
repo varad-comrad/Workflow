@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
-from typing import Dict, Iterable, List, Optional, TextIO
 import cmd2, os, subprocess, colorama, settings, pathlib
-from cmd2.command_definition import CommandSet
 
+#!!!!!!!!!!!!!!!!!!!!!!!! TODO: MODIFY ALL subprocess.run COMMANDS INCLUDING cwd ARGUMENT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 def get_shortened_path(path):
     home = os.path.expanduser("~")
@@ -12,10 +11,24 @@ def get_shortened_path(path):
         return f"~/{rel_path}" if rel_path else "~"
     return path
 
+def shortened_path(path: pathlib.Path, user: str):
+    ret = path.absolute().as_posix()
+    ret = ret.replace(f'/home/{user}', '~')
+    if ret.endswith('..'):
+        ret = ret.replace('/..', '')
+    return ret
+
 class Shell(cmd2.Cmd):
 
     path = pathlib.Path('.')
-    prompt = f"{colorama.Fore.GREEN}{subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout.strip()}@{colorama.Fore.GREEN}{subprocess.run('hostname', shell=True, capture_output=True, text=True).stdout.strip()}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{get_shortened_path(path.absolute().as_posix())}{colorama.Style.RESET_ALL}$ "
+
+    user = subprocess.run('whoami', shell=True,
+                          capture_output=True, text=True).stdout.strip()
+    
+    host = subprocess.run('hostname', shell=True,
+                          capture_output=True, text=True).stdout.strip()
+    
+    prompt = f"{colorama.Fore.GREEN}{user}@{colorama.Fore.GREEN}{host}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{shortened_path(path, user)}{colorama.Style.RESET_ALL}$ "
 
     # highlighted_keywords = ['exit', 'mkdb', 'config', 'mkdir',
     #                         'pyproj', 'new', 'push', 'bash', 'clear', 'git']
@@ -90,9 +103,24 @@ class Shell(cmd2.Cmd):
         subprocess.run('git ' + arg, shell=True)
 
     def do_cd(self, arg):
-        self.path /= arg
-        os.chdir(arg)
-        self.prompt = f"{colorama.Fore.GREEN}{subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout.strip()}@{colorama.Fore.GREEN}{subprocess.run('hostname', shell=True, capture_output=True, text=True).stdout.strip()}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{get_shortened_path(self.path.absolute().as_posix())}{colorama.Style.RESET_ALL}$ "
+        # TODO: Debug and implement the cases where arg is '-' and '~' and '..'
+        prev = self.path
+        if arg == '..':
+            self.path = self.path.absolute().parent
+            print(self.path)
+        elif arg == '-':
+            pass
+        elif arg == '~':
+            print(pathlib.Path(f'/home/{self.user}'))
+        else:
+            self.path /= arg
+        try:
+            os.chdir(arg)
+            self.prompt = f"{colorama.Fore.GREEN}{self.user}@{colorama.Fore.GREEN}{self.host}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{shortened_path(self.path, self.user)}{colorama.Style.RESET_ALL}$ "
+
+        except FileNotFoundError:
+            print(f'No such file or directory: {self.path}')
+            self.path = prev
 
     def do_ls(self, arg):
         subprocess.run('ls ' + arg, shell=True)

@@ -20,7 +20,7 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 - Calling 'workflow' by itself will create a new workflow shell, where all commands can be executed
 - It is also possible to call 'workflow' with arguments. The possibilities are:
     - workflow mkdir {args} => mkdirproj.py {args}
-    - workflow db {args} => mkdb.py {args}
+    - workflow mkdb {args} => mkdb.py {args}
     - workflow pythonproj {args} => pythonproj.py {args}
     - workflow config {args} => config.py {args}
     - workflow new {args} => make_workflow.py {args}
@@ -30,6 +30,8 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 - Drop version requirement if venv manager is conda and arg passed is -e
 - Debug auto-install dependencies for venvs (colorama, cmd2)
 - Debug auto-install text_files
+- Syntax highlighting for shell.py commands
+- Implementation of shell.py methods
 
 ## FUTURE:
 
@@ -46,8 +48,8 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 
 
 - Any Linux Distro<!--.  If you're still using other low tier OS, do yourself a favor  -->
-- cmd2 Python library
-- colorama Python library
+- cmd2 Python library (```pip install cmd2```)
+- colorama Python library (```pip install colorama```)
 - Python3.10+
 - For Python projects:
     - pyenv (pyenv-virtualenv), poetry or conda
