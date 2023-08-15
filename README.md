@@ -54,4 +54,14 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 - Python3.10+
 - For Python projects:
     - pyenv (pyenv-virtualenv), poetry or conda
+- For Java projects:
+    - Maven or Gradle (WIP)
+- For Rust projects:
+    - Cargo (and rustc) (WIP)
+- For C/C++ projects:
+    - CMake, gcc (WIP)
+
+## DOCUMENTATION: 
+
+### TBA
 

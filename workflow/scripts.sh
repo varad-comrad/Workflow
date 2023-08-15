@@ -67,6 +67,12 @@ function activate_shell(){
     shell.py 
 }
 
+function runner(){
+    coderunner.py "$@"
+}
+
+
+
 function new_workflow(){
     if [ $1 = 'function' ]; then
         shift
@@ -102,6 +108,9 @@ function workflow(){
     elif [ $1 = 'reset' ]; then
         shift
         resetter "$@"
+    elif [ $1 = 'run' ]; then
+        shift 
+        runner "$@" 
     elif [ $1 = '-h' ]; then
         cat text_files/advanced_helper.txt
     else
@@ -114,3 +123,4 @@ function loc() {
 git ls-files | grep $1 | xargs wc -l
 
 }
+

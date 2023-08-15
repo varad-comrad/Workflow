@@ -70,6 +70,7 @@ def runner():
 
 def parse_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('args', type=str, default='.')
     parser.add_argument('--build', action='store_true', default=False)
     parser.add_argument('--test', action='store_true', default=False)
     parser.add_argument('--bench', action='store_true', default=False)

@@ -1,0 +1,41 @@
+{
+    "FileExecutorMap":{
+        "py": "python {}",
+        "c": "gcc {} && ./{}",
+        "cpp": "g++ {} && ./{}",
+        "rs": "rustc {} && ./{}",
+        "java": "javac {} && java {}",
+        "js": "node {}",
+        "ts": "ts-node {}",
+        "kt": "kotlinc {} && java {}", // TODO
+        "kts": "gcc {} && ./{}", // TODO
+        "jl": "jl {}",
+        "nim": "nim compile --verbosity:0 --hints:off --run {}",
+        "csproj": "dotnet run --project {}",
+        "go": "go run {}",
+        "zig": "zig run {}",
+        "v": "v run {}",
+        "rb": "ruby {}",
+        "sh": "bash {}",
+        "r": "Rscript"
+    },
+     
+    "DirectoryExecutorMap": {
+        "__main__.py": "python {}",
+        "main.py": "python {}",
+        "pyproject.toml": "poetry run python {}",
+        "cargo.toml": "cargo run {}"
+    },
+     
+    "DirectoryTestMap": {
+
+    },
+    
+    "DirectoryBenchMap": {
+
+    },
+    
+    "DirectoryDebugMap": {
+
+    }
+}
