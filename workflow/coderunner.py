@@ -65,7 +65,7 @@ def run_code(path: pathlib.Path):
 def runner():
     path = pathlib.Path(sys.argv[1])
     ret = run_code(path)
-    print('\n\n' + ret)
+    print('\n' * 3 + ret)
     return ret # exit code
 
 def parse_args():

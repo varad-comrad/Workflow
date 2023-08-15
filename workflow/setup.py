@@ -178,8 +178,28 @@ function workflow(){
 		file.write(template)
 	pass
 
+def check_pyenv_existence():
+	pyenv_exists = True #TODO: develop proper check
+	if not pyenv_exists:
+		consent = input("Pyenv was not found. Do you wish to install it (Y/N)? ")
+		if consent.lowercase == 'y':
+			install_pyenv()
+		else:
+			return 
+	
+def install_pyenv():
+	subprocess.run(
+		'git clone https://github.com/pyenv/pyenv.git ~/.pyenv && cd ~/.pyenv && src/configure && make -C src', shell=True)
+	print('\n'*3)
+	sh = input('write the name of the shell you want pyenv installed (bash, zsh, ...)')
+	subprocess.run(
+            f'''echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.{sh}rc
+            echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.{sh}rc
+            echo 'eval "$(pyenv init -)"' >> ~/.{sh}rc''', shell=True)
+	
 
 def main():
+	check_pyenv_existence()
 	path = create_workflow_directory()
 	move_directory(pathlib.Path('.') / 'workflow', path)
 	chmod(path)

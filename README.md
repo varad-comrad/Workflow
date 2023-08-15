@@ -33,15 +33,15 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 - Debug auto-install text_files
 - Syntax highlighting for shell.py commands
 - Implementation of shell.py methods
+- Debug auto-installation of pyenv
+- Further develop project creation through their kind (data science, web app, etc)
 
 ## FUTURE:
 
 - In the future, it will be possible to create projects from other languages like Java and Rust
-- Eventually projects will also be created through their kind (data science, web app, etc)
 - Possibly manage .NET/Node projects as well
 - Possibly manage C/C++ projects
 - Study possibility of integration with docker
-- Study possibility of auto-installing pyenv, if not yet installed
 
 Longer Future: explore possibilitites like AI helper, integration with other CLI tools, etc.
 

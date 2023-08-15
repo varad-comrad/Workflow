@@ -23,6 +23,7 @@
     "DirectoryExecutorMap": {
         "__main__.py": "python {}",
         "main.py": "python {}",
+        "manage.py": "python manage.py runserver",
         "pyproject.toml": "poetry run python {}",
         "cargo.toml": "cargo run {}"
     },
