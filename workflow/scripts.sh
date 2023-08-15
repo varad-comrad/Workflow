@@ -80,6 +80,11 @@ function new_workflow(){
     elif [ $1 = 'alias' ]; then
         shift
         alias.py "$@"        
+    # elif [ $1 = 'docker' ]; then
+    #     shift
+    #     alias.py "$@"  
+    else
+        echo "ERROR: Unexpected argument '$1'. Options are 'function', 'alias'"  
     fi
 }
 

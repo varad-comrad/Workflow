@@ -237,6 +237,9 @@ def install_distrobox():
 def install_docker():
 	pass
 
+def install_kubernetes():
+	pass
+
 def install_julia():
 	pass
 
@@ -265,10 +268,35 @@ def install_ruby():
 	pass
 
 def arg_parser():
+	choices = [
+		'c',
+		'cpp',
+		'pyenv',
+		'poetry',
+		'conda',
+		'dotnet',
+		'rs',
+		'ruby',
+		'r',
+		'zig',
+		'go',
+		'kubernetes',
+		'docker',
+		'nim',
+		'java',
+		'gradle',
+		'maven',
+		'kotlin',
+		'distrobox',
+		'node',
+		'ts-node',
+		'julia',
+		'v',
+	]
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--install-all', action='store_true', default=False)
-	parser.add_argument('-y', action='store_true', default=False)
-	parser.add_argument('--install', nargs='*', default=[])
+	parser.add_argument('-y', '--yes', action='store_true', default=False)
+	parser.add_argument('--install', nargs='*', default=[], choices=choices)
 
 def main():
 	check_pyenv_existence()
