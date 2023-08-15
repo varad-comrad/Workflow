@@ -28,6 +28,7 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 ## TODO:
 
 - Develop coderunner.py
+- Include code builder, code tester and code benchmarker in coderunner.py
 - Debug auto-install dependencies for venvs (colorama, cmd2)
 - Debug auto-install text_files
 - Syntax highlighting for shell.py commands
