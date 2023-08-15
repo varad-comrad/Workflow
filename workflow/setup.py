@@ -2,6 +2,7 @@ import json
 import pathlib
 import subprocess
 import shutil
+import argparse
 
 
 def create_workflow_directory() -> pathlib.Path:
@@ -187,6 +188,12 @@ def check_pyenv_existence():
 		else:
 			return 
 	
+def check_conda_existence():
+	pass
+
+def check_poetry_existence():
+	pass
+
 def install_pyenv():
 	subprocess.run(
 		'git clone https://github.com/pyenv/pyenv.git ~/.pyenv && cd ~/.pyenv && src/configure && make -C src', shell=True)
@@ -196,7 +203,72 @@ def install_pyenv():
             f'''echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.{sh}rc
             echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.{sh}rc
             echo 'eval "$(pyenv init -)"' >> ~/.{sh}rc''', shell=True)
-	
+
+def install_poetry():
+	pass
+
+def install_conda():
+	pass
+
+def install_make():
+	pass
+
+def install_cargo():
+	pass
+
+def install_cmake():
+	pass
+
+def install_maven():
+	pass
+
+def install_gradle():
+	pass
+
+def install_jdk():
+	pass
+
+def install_kotlinc():
+	pass
+
+def install_distrobox():
+	pass
+
+def install_docker():
+	pass
+
+def install_julia():
+	pass
+
+def install_node():
+	pass
+
+def install_ts_node():
+	pass
+
+def install_nim():
+	pass
+
+def install_go():
+	pass
+
+def install_zig():
+	pass
+
+def install_v():
+	pass
+
+def install_cs():
+	pass
+
+def install_ruby():
+	pass
+
+def arg_parser():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--install-all', action='store_true', default=False)
+	parser.add_argument('-y', action='store_true', default=False)
+	parser.add_argument('--install', nargs='*', default=[])
 
 def main():
 	check_pyenv_existence()

@@ -29,6 +29,7 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 
 - Develop coderunner.py
 - Include code builder, code tester and code benchmarker in coderunner.py
+- Debug workon.py
 - Debug auto-install dependencies for venvs (colorama, cmd2)
 - Debug auto-install text_files
 - Syntax highlighting for shell.py commands
@@ -42,6 +43,7 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 - Possibly manage .NET/Node projects as well
 - Possibly manage C/C++ projects
 - Study possibility of integration with docker
+- Auto-installation of a lot of things (conda, docker, make, cmake, etc)
 
 Longer Future: explore possibilitites like AI helper, integration with other CLI tools, etc.
 
