@@ -69,7 +69,20 @@ function runner(){
     coderunner.py "$@"
 }
 
-
+function runmanager(){
+    if [ $1 = 'downloads' ]; then
+        shift
+        downloadmanager.py "$@"
+    elif [ $1 = 'alias' ]; then
+        shift
+        alias.py "$@"        
+    elif [ $1 = 'download-pattern' ]; then
+        shift
+        configdownload.py "$@"        
+    else
+        echo "ERROR: Unexpected argument '$1'. Options are ..."  
+    fi
+}
 
 function new_workflow(){
     if [ $1 = 'function' ]; then
@@ -78,6 +91,9 @@ function new_workflow(){
     elif [ $1 = 'alias' ]; then
         shift
         alias.py "$@"        
+    elif [ $1 = 'download-pattern' ]; then
+        shift
+        configdownload.py "$@"        
     else
         echo "ERROR: Unexpected argument '$1'. Options are 'function', 'alias'"  
     fi
@@ -124,6 +140,9 @@ function workflow(){
     elif [ $1 = 'docker' ]; then
         shift 
         workflow_docker "$@" 
+    elif [ $1 = 'manage' ]; then
+        shift 
+        runmanager "$@" 
     elif [ $1 = '-h' ]; then
         cat text_files/advanced_helper.txt
     else

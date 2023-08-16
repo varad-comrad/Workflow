@@ -3,6 +3,7 @@
 import cmd2, os, subprocess, colorama, settings, pathlib
 from typing import Optional, TextIO, List, Iterable, Dict
 from cmd2 import CommandSet
+import re
 
 
 
@@ -179,12 +180,30 @@ class Shell(cmd2.Cmd):
         subprocess.run('cmake ' + arg, shell=True)
 
     def do_gcc(self, arg):
-        # TODO: CHECK IF arg IS C++ OR C FILE AND CALL THE CORRECT COMPILER
-        subprocess.run('cmake ' + arg, shell=True)
+        if re.findall(r'.*\.c\b', arg):
+            print('gcc')
+            subprocess.run('gcc ' + arg, shell=True)
+        else:
+            print('g++')
+            subprocess.run('g++ ' + arg, shell=True)
 
+    def do_gpp(self, arg):
+        subprocess.run('g++ ' + arg, shell=True)
+
+    def do_javac(self, arg):
+        subprocess.run('javac ' + arg, shell=True)
+    
     def do_java(self, arg):
-        # TODO: A LOT ACTUALLY
-        subprocess.run('cmake ' + arg, shell=True)
+        subprocess.run('java ' + arg, shell=True)
+    
+    def do_maven(self, arg):
+        subprocess.run('maven ' + arg, shell=True)
+
+    def do_gradle(self, arg):
+        subprocess.run('gradle ' + arg, shell=True)
+
+    def do_ant(self, arg):
+        subprocess.run('ant ' + arg, shell=True)
 
     def do_exit(self, arg):
         subprocess.run('clear', shell=True)
@@ -193,5 +212,5 @@ class Shell(cmd2.Cmd):
 
 
 if __name__ == '__main__':
-    cli = Shell(shortcuts={':q': 'exit', ':g': 'git'}, include_ipy=True)
+    cli = Shell(shortcuts={':q': 'exit', ':g': 'git', 'g++': 'gpp'}, include_ipy=True)
     cli.cmdloop()

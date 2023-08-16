@@ -27,14 +27,15 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 
 ## TODO:
 
-- Develop coderunner.py
-- Include code builder, code tester and code benchmarker in coderunner.py
+- Debug auto-installation of pyenv
 - Debug workon.py
 - Debug auto-install dependencies for venvs (colorama, cmd2)
 - Debug auto-install text_files
+- Debug shell.py methods
+- Develop coderunner.py
+- Implement download manager
+- Include code builder, code tester and code benchmarker in coderunner.py
 - Syntax highlighting for shell.py commands
-- Implementation of shell.py methods
-- Debug auto-installation of pyenv
 - Further develop project creation through their kind (data science, web app, etc)
 
 ## FUTURE:
