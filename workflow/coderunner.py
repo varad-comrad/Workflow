@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import pathlib, subprocess, glob, sys, argparse
+import pathlib, subprocess, glob, sys, argparse, logging
 
 
 def run_code(path: pathlib.Path):
@@ -61,11 +61,23 @@ def run_code(path: pathlib.Path):
     #     subprocess.run(f'cargo run', shell=True)
     return 
 
+def debug_code():
+    pass
+
+def test_code():
+    pass
+
+def bench_code():
+    pass
+
+def build_code():
+    pass
+
 
 def runner():
     path = pathlib.Path(sys.argv[1])
     ret = run_code(path)
-    print('\n' * 3 + ret)
+    print('\n' * 3 + 'Code returned with exit code ' + ret)
     return ret # exit code
 
 def parse_args():
@@ -76,10 +88,24 @@ def parse_args():
     parser.add_argument('--bench', action='store_true', default=False)
     parser.add_argument('--debug', action='store_true', default=False)
     # TODO: not allow these arguments to be passed simultaneously
-    return parser.parse_args()
+    parsed_args = parser.parse_args()
+    special_args = [parsed_args.build, parsed_args.bench, parsed_args.debug, parsed_args.test]
+    if sum(special_args) > 1:
+        raise ValueError("Too many arguments. Can only pass one type of argument at a time")
+    return parsed_args
 
 def main():
-    pass
+    args = parse_args()
+    if args.build:
+        build_code()
+    elif args.test:
+        test_code()
+    elif args.bench:
+        bench_code()
+    elif args.debug:
+        debug_code()
+    else:
+        run_code()
 
 if __name__ == '__main__':
     runner()

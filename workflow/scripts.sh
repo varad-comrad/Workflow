@@ -21,15 +21,13 @@ function resetter(){
     if [ $1 = 'commit' ]; then
         shift
         reset_commit $@
-
     fi 
 }
 
 function reset_commit() {
   local commit_number=${1:-"1"}
   local commit_reference="HEAD~$commit_number"
-  local commit_hash=$(git rev-parse "$commit_reference")
-  git reset --hard "$commit_hash"
+  git reset --hard "$commit_reference"
 }
 
 function workon(){
@@ -80,11 +78,18 @@ function new_workflow(){
     elif [ $1 = 'alias' ]; then
         shift
         alias.py "$@"        
-    # elif [ $1 = 'docker' ]; then
-    #     shift
-    #     alias.py "$@"  
     else
         echo "ERROR: Unexpected argument '$1'. Options are 'function', 'alias'"  
+    fi
+}
+
+function workflow_docker(){
+    if [ $1 = 'new' ]; then
+        shift
+        new_docker "$@"
+    elif [ $1 = 'use' ]; then
+        shift
+        use_docker "$@"
     fi
 }
 
@@ -116,6 +121,9 @@ function workflow(){
     elif [ $1 = 'run' ]; then
         shift 
         runner "$@" 
+    elif [ $1 = 'docker' ]; then
+        shift 
+        workflow_docker "$@" 
     elif [ $1 = '-h' ]; then
         cat text_files/advanced_helper.txt
     else
@@ -125,7 +133,10 @@ function workflow(){
 }
 
 function loc() {
-git ls-files | grep $1 | xargs wc -l
-
+    if [ $# -eq  0 ]; then
+        git ls-files | xargs wc -l
+    else
+        git ls-files | grep $1 | xargs wc -l
+    fi
 }
 
