@@ -28,6 +28,8 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 ## TODO:
 
 - Debug auto-installation of pyenv
+- Debug new implementation of push_git.py 
+- Check if default_branch is necessary
 - Debug workon.py
 - Debug auto-install dependencies for venvs (colorama, cmd2)
 - Debug auto-install text_files
