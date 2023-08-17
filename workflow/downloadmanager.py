@@ -9,11 +9,12 @@ logging.basicConfig(level=logging.INFO,
 def parsed_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config", nargs=2, type=str) # pattern and folder
-    parser.add_argument("-d", "--add-dir", type=str, nargs='+') # add folder to watchlist
+    parser.add_argument("-d", "--delete-config", type=str) # pattern
+    parser.add_argument("-a", "--add-dir", type=str, nargs='+') # add folder to watchlist
     parser.add_argument("-r", "--rm-dir", type=str, nargs='+') # remove folder from watchlist
     parser.add_argument("-l", "--loop", action='store_true', default=False)
     args = parser.parse_args()
-    if args.loop and any([args.add_dir, args.rm_dir, args.config]):
+    if args.loop and any([args.add_dir, args.rm_dir, args.config, args.delete_config]):
         raise ValueError()
     return args
 
@@ -29,15 +30,26 @@ def write_file(content):
 
 def add_dir(new_dirs):
     content = open_file()
-    content['watchlist'].extend(new_dirs)
+    content['watchlist'].extend(list(set(new_dirs)))
     write_file(content)
 
-def rm_dir():
+def rm_dir(dirs):
     content = open_file()
+    for element in set(dirs):
+        try:
+            content['watchlist'].remove(element)
+        except ValueError:
+            pass
     write_file(content)
 
-def config():
+def add_config(new_config):
     content = open_file()
+    content['patterns'][new_config[0]] = new_config[1]
+    write_file(content)
+
+def rm_config(pattern):
+    content = open_file()
+    content['patterns'].pop(pattern)
     write_file(content)
 
 
@@ -64,12 +76,14 @@ def supervise_loop():
 def main():
     args = parsed_args()
     if args.add_dir:
-        pass
+        add_dir(args.add_dir)
     if args.rm_dir:
-        pass
+        rm_dir(args.rm_dir)
     if args.config:
-        pass
-    if not any([args.add_dir, args.rm_dir, args.config]):
+        add_config(args.config)
+    if args.delete_config:
+        rm_config(args.delete_config)
+    if not any([args.add_dir, args.rm_dir, args.config, args.delete_config]):
         if args.loop:
             supervise_loop()
         else:
