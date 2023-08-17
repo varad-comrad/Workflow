@@ -1,0 +1,10 @@
+{
+    "watchlist": ["Downloads"],
+
+    "patterns": {
+        "jpeg": "Pictures",
+        "jpg": "Pictures",
+        "svg": "Pictures",
+        "png": "Pictures"
+    }
+}
