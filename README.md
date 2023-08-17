@@ -28,14 +28,11 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 ## TODO:
 
 - Debug auto-installation of pyenv
-- Debug new implementation of push_git.py 
+- Add functionality for manual selection of files to be part of the push in push_git.py
 - Check if default_branch is necessary
-- Debug workon.py
-- Debug auto-install dependencies for venvs (colorama, cmd2)
 - Debug auto-install text_files
 - Debug shell.py methods
 - Develop coderunner.py
-- Implement download manager
 - Include code builder, code tester and code benchmarker in coderunner.py
 - Syntax highlighting for shell.py commands
 - Further develop project creation through their kind (data science, web app, etc)
@@ -57,14 +54,6 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 - cmd2 Python library (```pip install cmd2```)
 - colorama Python library (```pip install colorama```)
 - Python3.10+
-- For Python projects:
-    - pyenv (pyenv-virtualenv), poetry or conda
-- For Java projects:
-    - Maven or Gradle (WIP)
-- For Rust projects:
-    - Cargo (and rustc) (WIP)
-- For C/C++ projects:
-    - CMake, gcc (WIP)
 
 ## DOCUMENTATION: 
 

@@ -12,7 +12,7 @@ def main():
     try:
         venv_name = sys.argv[1]
         if not venv_lookup(venv_name):
-            create_venv() 
+            create_venv(venv_name) 
         print(f'source {venv_name}/bin/activate')    
     except IndexError:
         create_venv(settings.s.get("default_name_venv", "my_venv"))
