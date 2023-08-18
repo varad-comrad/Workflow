@@ -20,11 +20,21 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('args', nargs=1, type=str)
     parser.add_argument('-b' ,'--branch', default='')
+    parser.add_argument('-f' ,'--files', default='', nargs='*', type=str)
     args = parser.parse_args()
+    
     current_branch = subprocess.run(
         'git branch', shell=True, capture_output=True, text=True).stdout.split('*')[1].strip()
-    subprocess.run(f'git add .', cwd='.', shell=True)
+    
+    if len(args.files) > 0:
+
+        subprocess.run(f'git add {" ".join(args.files)}', cwd='.', shell=True)
+        pass
+    else:
+        subprocess.run(f'git add .', cwd='.', shell=True)
+    
     subprocess.run(f"git commit -m '{args.args[0]}'",cwd='.', shell=True)
+    
     if args.branch:
         current_branch = args.branch
         subprocess.run(f'git checkout {branch_exists(args.branch)} {args.branch} && git push -u origin {current_branch}', cwd='.', shell=True)
