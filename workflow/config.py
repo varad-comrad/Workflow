@@ -6,7 +6,10 @@ def set_value(key: typing.LiteralString, value: str | int) -> None:
     path = pathlib.Path(__file__).parent/'settings.json'
     with path.open('r') as file:
         s: dict = json.load(file)
-    s[key] = value
+    if key == 'remove':
+        s.pop(value, None)
+    else:
+        s[key] = value
     with path.open('w') as file:
         json.dump(s, file)
 

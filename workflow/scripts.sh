@@ -70,15 +70,9 @@ function runner(){
 }
 
 function runmanager(){
-    if [ $1 = 'downloads' ]; then
+    if [ $1 = 'download' ]; then
         shift
-        downloadmanager.py "$@"
-    elif [ $1 = 'alias' ]; then
-        shift
-        alias.py "$@"        
-    elif [ $1 = 'download-pattern' ]; then
-        shift
-        configdownload.py "$@"        
+        downloadmanager.py "$@"        
     else
         echo "ERROR: Unexpected argument '$1'. Options are ..."  
     fi
@@ -140,7 +134,7 @@ function workflow(){
     elif [ $1 = 'docker' ]; then
         shift 
         workflow_docker "$@" 
-    elif [ $1 = 'manage' ]; then
+    elif [ $1 = 'manager' ]; then
         shift 
         runmanager "$@" 
     elif [ $1 = '-h' ]; then

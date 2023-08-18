@@ -20,12 +20,13 @@ def parsed_args():
 
 def open_file():
     content = {}
-    with open(f'downloadmanager.json', 'r') as file:
+    
+    with open(f'{pathlib.Path(__file__).parent.absolute()}/downloadmanager.json', 'r') as file:
         content = json.load(file)
     return content
 
 def write_file(content):
-    with open(f'downloadmanager.json', 'w') as file:
+    with open(f'{pathlib.Path(__file__).parent.absolute()}/downloadmanager.json', 'w') as file:
         json.dump(content, file)
 
 def add_dir(new_dirs):
