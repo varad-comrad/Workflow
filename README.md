@@ -28,9 +28,7 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 ## TODO:
 
 - Debug auto-installation of pyenv
-- Add functionality for manual selection of files to be part of the push in push_git.py
-- Check if default_branch is necessary
-- Debug auto-install text_files
+- Finish poetry management in pyproj.py
 - Debug shell.py methods
 - Develop coderunner.py
 - Include code builder, code tester and code benchmarker in coderunner.py

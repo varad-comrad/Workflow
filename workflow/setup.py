@@ -179,17 +179,30 @@ function workflow(){
 		file.write(template)
 	pass
 
-def check_pyenv_existence():
-	pyenv_exists = True #TODO: develop proper check
-	if not pyenv_exists:
-		consent = input("Pyenv was not found. Do you wish to install it (Y/N)? ")
-		if consent.lowercase == 'y':
-			install_pyenv()
-		else:
-			return 
+def prompt_user(soft: str,installer, ignore: bool=False) -> None:
+	consent: str
+	if ignore:
+		consent='y'
+	else:
+		consent = input(f"{soft} was not found. Do you wish to install it (Y/N)? ")
+	if consent.lower() == 'y':
+		installer()
+	else:
+		return
+
+def check_pyenv_existence(ignore: bool=False) -> None:
+	try:
+		subprocess.run('pyenv', check=True, shell=True, capture_output=True)
+		return 
+	except subprocess.CalledProcessError:
+		prompt_user('Pyenv', install_pyenv, ignore)
 	
-def check_conda_existence():
-	pass
+def check_conda_existence(ignore: bool=False) -> None:
+	try:
+		subprocess.run('conda', check=True, shell=True, capture_output=True)
+		return
+	except subprocess.CalledProcessError:
+		prompt_user('Pyenv', install_pyenv, ignore)
 
 def check_poetry_existence():
 	pass
@@ -208,7 +221,16 @@ def install_poetry():
 	pass
 
 def install_conda():
-	pass
+	path = pathlib.Path(__file__).parent / 'Dowloads'
+	subprocess.run(
+		'wget https: // repo.anaconda.com/archive/Anaconda3-2023.03-1-Linux-x86_64.sh', cwd=path.absolute(), shell=True)
+	subprocess.run(
+		'bash Anaconda3-2023.03-1-Linux-x86_64.sh -b', cwd=path.absolute(), shell=True)
+	# subprocess.run('conda init ')
+	# if ! [[$PATH = ~ "$HOME/anaconda3/bin"]]; then PATH = "$HOME/anaconda3/bin:$PATH" fi
+	# conda init bash
+	# source ~/.bashrc
+	# conda update conda
 
 def install_make():
 	pass
@@ -299,6 +321,7 @@ def arg_parser():
 	parser.add_argument('--install', nargs='*', default=[], choices=choices)
 
 def main():
+	# TODO: add conda installation here. Conda init loves breaking bash rc for some reason
 	check_pyenv_existence()
 	path = create_workflow_directory()
 	move_directory(pathlib.Path('.') / 'workflow', path)
