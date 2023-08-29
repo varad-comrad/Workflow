@@ -54,6 +54,5 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 - Python3.10+
 
 ## DOCUMENTATION: 
-
 ### TBA
 
