@@ -1,56 +1,44 @@
 #!/usr/bin/env python
 
-import pathlib, subprocess, glob, sys, argparse, logging
+import pathlib, subprocess, glob, sys, argparse, logging, json
 
+
+def run(path:pathlib.Path):
+    if path.is_file():
+        return run_file(path)
+    else:
+        return run_dir(path)
+    
+
+def run_file(path:pathlib.Path):
+    extension = path.name.split('.')[-1]
+    data: dict
+    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
+        data = json.load(file)['FileExecutorMap']
+    if extension not in data.keys():
+        raise ValueError(f'No runner found for extension {extension}')
+    command: str = data[extension]
+    to_format: list[str]
+    
+    if extension in ['c', 'cpp']:
+        to_format = [path.name, path.name.split(
+            '.')[0], path.name.split('.')[0]]        
+    elif extension in ['rs', 'java', 'kt']:
+        to_format = [path.name, path.name.split('.')[0]]
+    else:
+        to_format = [path.name]
+
+    command = command.format(*to_format)
+    process = subprocess.run(f'cd {path.parent.absolute()} && ' + command, shell=True, capture_output=True, text=True)
+    try:
+        return process.stdout.strip()
+    except subprocess.CalledProcessError:
+        return process.stderr.strip()
+
+def run_dir(path:pathlib.Path):
+    pass
 
 def run_code(path: pathlib.Path):
-    if path.is_file():
-        match path.name.split('.')[-1]:
-            case 'py':
-                subprocess.run(f'python {path.name}', shell=True)
-            case 'c':
-                subprocess.run(
-                    f'gcc {path.name} -o {path.name.split(".")[0]} && ./{path.name.split(".")[0]}', shell=True)
-            case 'cpp':
-                subprocess.run(
-                    f'g++ {path.name} -o {path.name.split(".")[0]} && ./{path.name.split(".")[0]}', shell=True)
-            case 'rs':
-                subprocess.run(f'rustc {path.name} && ./{path.name.split(".")[0]}', shell=True)
-            case 'js':
-                subprocess.run(f'node {path.name}', shell=True)
-            case 'ts':
-                subprocess.run(f'ts-node {path.name}', shell=True)
-            case 'java':
-                subprocess.run(
-                    f'javac {path.name} && java {path.name.split(".")[0]}', shell=True)
-            case 'kt': #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                subprocess.run(
-                    f'javac {path.name} && java {path.name.split(".")[0]}', shell=True)
-            case 'kts':  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                subprocess.run(
-                    f'javac {path.name} && java {path.name.split(".")[0]}', shell=True)
-            case 'jl':
-                subprocess.run(
-                    f'julia {path.name}', shell=True)
-            case 'csproj':
-                subprocess.run(
-                    f'dotnet run --project {path.name}', shell=True)
-            case 'go':
-                subprocess.run(
-                    f'go run {path.name}', shell=True)
-            case 'v':
-                subprocess.run(
-                    f'v run {path.name}', shell=True)
-            case 'zig':
-                subprocess.run(
-                    f'zig run {path.name}', shell=True)
-            case 'nim':
-                subprocess.run(
-                    f'nim compile --verbosity:0 --hints:off --run {path.name}', shell=True)
-            case _:
-                pass
-        return     
-
     if any((element.endswith('__main__.py') or element.endswith('main.py')) for element in glob.iglob(path.name, recursive=True)):
         subprocess.run(f'python {path.name}', shell=True)
     elif pathlib.Path('pyproject.toml') in path.iterdir():
@@ -95,17 +83,18 @@ def parse_args():
     return parsed_args
 
 def main():
-    args = parse_args()
-    if args.build:
-        build_code()
-    elif args.test:
-        test_code()
-    elif args.bench:
-        bench_code()
-    elif args.debug:
-        debug_code()
-    else:
-        run_code()
+    args = pathlib.Path(parse_args().args)
+    return run_file(args)
+    # if args.build:
+    #     build_code()
+    # elif args.test:
+    #     test_code()
+    # elif args.bench:
+    #     bench_code()
+    # elif args.debug:
+    #     debug_code()
+    # else:
+    #     run_code()
 
 if __name__ == '__main__':
-    runner()
+    print(main())

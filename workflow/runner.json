@@ -1,14 +1,14 @@
 {
     "FileExecutorMap":{
         "py": "python {}",
-        "c": "gcc {} && ./{}",
-        "cpp": "g++ {} && ./{}",
+        "c": "gcc {} -o {} && ./{}",
+        "cpp": "g++ {} -o {} && ./{}",
         "rs": "rustc {} && ./{}",
         "java": "javac {} && java {}",
         "js": "node {}",
         "ts": "ts-node {}",
-        "kt": "kotlinc {} && java {}", // TODO
-        "kts": "gcc {} && ./{}", // TODO
+        "kt": "kotlinc {} && java {}",
+        "kts": "kotlin -script {}",
         "jl": "jl {}",
         "nim": "nim compile --verbosity:0 --hints:off --run {}",
         "csproj": "dotnet run --project {}",
