@@ -3,6 +3,18 @@
 import pathlib, subprocess, glob, sys, argparse, logging, json
 
 
+logging.basicConfig(level=logging.INFO, # for "[running] {command}" part
+                    format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
+
+logging.basicConfig(level=logging.WARN, # for "[Done] exited with code=? in ? seconds" part 
+                    format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
+
+logging.basicConfig(level=logging.ERROR, # for error messages
+                    format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
+
+logging.basicConfig(level=logging.DEBUG, # for debug messages
+                    format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
+
 def run(path:pathlib.Path):
     if path.is_file():
         return run_file(path)
@@ -75,7 +87,6 @@ def parse_args():
     parser.add_argument('--test', action='store_true', default=False)
     parser.add_argument('--bench', action='store_true', default=False)
     parser.add_argument('--debug', action='store_true', default=False)
-    # TODO: not allow these arguments to be passed simultaneously
     parsed_args = parser.parse_args()
     special_args = [parsed_args.build, parsed_args.bench, parsed_args.debug, parsed_args.test]
     if sum(special_args) > 1:
@@ -83,18 +94,20 @@ def parse_args():
     return parsed_args
 
 def main():
-    args = pathlib.Path(parse_args().args)
-    return run_file(args)
-    # if args.build:
-    #     build_code()
-    # elif args.test:
-    #     test_code()
-    # elif args.bench:
-    #     bench_code()
-    # elif args.debug:
-    #     debug_code()
-    # else:
-    #     run_code()
+    parsed_args = parse_args()
+    args = pathlib.Path(parsed_args.args)
+    
+    if parsed_args.build:
+        return build_code(args)
+    elif parsed_args.test:
+        return test_code(args)
+    elif parsed_args.bench:
+        return bench_code(args)
+    elif parsed_args.debug:
+        return debug_code(args)
+    else:
+        return run(args)
 
 if __name__ == '__main__':
-    print(main())
+    # logging.log(msg=main(), level=logging.ERROR)
+    logging.log(msg=main(), level=logging.ERROR)
