@@ -1,6 +1,5 @@
 # Workflow (WIP)
-Scripts capable of creating new projects or pulling it from github with 2 or 3 commands. For now it only works for python projects.
-Also capable of creating new shell functions 
+Scripts to reduce workflow boilerplate for devs, capable of creating new projects, git pushing it, creating new bash functions and so on. For now it only works for python projects.
 
 Primary goal for now: create mkproj, mkdirproj and mkdb so that it is possible to generate any software dev/data scientist project in 3 shell commands. The projects will always be modularized
 

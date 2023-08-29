@@ -70,7 +70,7 @@ function runner(){
 }
 
 function runmanager(){
-    if [ $1 = 'download' ]; then
+    if [ $1 = 'files' ]; then
         shift
         downloadmanager.py "$@"        
     else
@@ -138,9 +138,9 @@ function workflow(){
         shift 
         runmanager "$@" 
     elif [ $1 = '-h' ]; then
-        cat text_files/advanced_helper.txt
+        cat text_files/advanced_helper.txt # helper.py advanced
     else
-        cat text_files/helper.txt 
+        cat text_files/helper.txt # helper.py
     fi
 
 }
