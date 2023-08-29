@@ -29,7 +29,7 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 
 - Debug auto-installation of pyenv
 - Finish poetry management in pyproj.py
-- Debug shell.py methods
+- Debug shell.py methods (spcially cd)
 - Develop coderunner.py
 - Include code builder, code tester and code benchmarker in coderunner.py
 - Syntax highlighting for shell.py commands
