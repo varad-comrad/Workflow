@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 
-import pathlib, subprocess, glob, sys, argparse, logging, json
+import pathlib, subprocess, glob, sys, argparse, logging, json, time
 
 
 logging.basicConfig(level=logging.INFO, # for "[running] {command}" part
-                    format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
+                    format="\x1b[38;5;20m[Running]\x1b[92m %(message)s\x1b[0m")
 
-logging.basicConfig(level=logging.WARN, # for "[Done] exited with code=? in ? seconds" part 
-                    format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
+logging.basicConfig(level=logging.WARNING, # for "[Done] exited with code=? in ? seconds" part 
+                    format="\033[38;5;20m[Done]\x1b[92m %(message)s\x1b[0m")
 
 logging.basicConfig(level=logging.ERROR, # for error messages
-                    format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
+                    format="\033[31m[ERROR]\x1b[92m %(message)s\x1b[0m")
 
 logging.basicConfig(level=logging.DEBUG, # for debug messages
                     format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
@@ -41,11 +41,8 @@ def run_file(path:pathlib.Path):
         to_format = [path.name]
 
     command = command.format(*to_format)
-    process = subprocess.run(command, cwd=path.parent.absolute(), shell=True, capture_output=True, text=True)
-    try:
-        return process.stdout.strip()
-    except subprocess.CalledProcessError:
-        return process.stderr.strip()
+    code = 0
+    return command, path
 
 def run_dir(path:pathlib.Path):
     data: dict
@@ -63,24 +60,7 @@ def run_dir(path:pathlib.Path):
     to_format: list[str]
     if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
         to_format.append(path.name)
-
-    process = subprocess.run(
-        command, cwd=path.parent.absolute(), shell=True, capture_output=True, text=True)
-    try:
-        return process.stdout.strip()
-    except subprocess.CalledProcessError:
-        return process.stderr.strip()
-
-# def run_code(path: pathlib.Path):
-#     if any((element.endswith('__main__.py') or element.endswith('main.py')) for element in glob.iglob(path.name, recursive=True)):
-#         subprocess.run(f'python {path.name}', shell=True)
-#     elif pathlib.Path('pyproject.toml') in path.iterdir():
-#         subprocess.run(f'poetry {path.name}', shell=True)
-#     elif pathlib.Path('cargo.toml') in path.iterdir():
-#         subprocess.run(f'cargo run', shell=True)    
-#     # elif pathlib.Path('cargo.toml') in path.iterdir():
-#     #     subprocess.run(f'cargo run', shell=True)
-#     return 
+    return command, path
 
 def debug_code():
     pass
@@ -94,6 +74,32 @@ def bench_code():
 def build_code():
     pass
 
+def executor(command: str, path: pathlib.Path):
+    code = 0
+    try:
+        logging.info(f'cd {path.parent.absolute()} && {command}')
+        t0 = time.perf_counter()
+        # stderr and stdout
+        result = subprocess.run(command, cwd=path.parent.absolute(
+        ), shell=True, capture_output=True, text=True)
+        output = result.stdout.strip()
+        err_output = result.stderr.strip()
+        code = result.returncode
+        print(output, err_output, sep='\n\n')
+
+    except subprocess.CalledProcessError as e:
+        code = e.returncode
+        print(e.stdout, e.stderr, sep='\n\n')
+    finally:
+        ansi_code: str
+        ansi_code2 = '\033[35m'
+        ansi_code3 = '\x1b[92m'
+        if code == 0:
+            ansi_code = '\033[35m'
+        else:
+            ansi_code = '\033[31m'
+        logging.warning(
+            f"exited with {ansi_code}{code=}{ansi_code3} in {ansi_code2}{(time.perf_counter() - t0)}{ansi_code3} seconds")
 
 # def runner():
 #     path = pathlib.Path(sys.argv[1])
@@ -115,20 +121,20 @@ def parse_args():
     return parsed_args
 
 def main():
+    #TODO: refactor code. return statement are not necessary
     parsed_args = parse_args()
     args = pathlib.Path(parsed_args.args)
     
     if parsed_args.build:
-        return build_code(args)
+        executor(*build_code(args))
     elif parsed_args.test:
-        return test_code(args)
+        executor(*test_code(args))
     elif parsed_args.bench:
-        return bench_code(args)
+        executor(*bench_code(args))
     elif parsed_args.debug:
-        return debug_code(args)
+        executor(*debug_code(args))
     else:
-        return run(args)
+        executor(*run(args))
 
 if __name__ == '__main__':
-    # logging.log(msg=main(), level=logging.ERROR)
-    logging.log(msg=main(), level=logging.ERROR)
+    main()
