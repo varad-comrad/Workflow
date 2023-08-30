@@ -41,7 +41,7 @@ def run_file(path:pathlib.Path):
         to_format = [path.name]
 
     command = command.format(*to_format)
-    process = subprocess.run(f'cd {path.parent.absolute()} && ' + command, shell=True, capture_output=True, text=True)
+    process = subprocess.run(command, cwd=path.parent.absolute(), shell=True, capture_output=True, text=True)
     try:
         return process.stdout.strip()
     except subprocess.CalledProcessError:
@@ -65,7 +65,7 @@ def run_dir(path:pathlib.Path):
         to_format.append(path.name)
 
     process = subprocess.run(
-        f'cd {path.parent.absolute()} && ' + command, shell=True, capture_output=True, text=True)
+        command, cwd=path.parent.absolute(), shell=True, capture_output=True, text=True)
     try:
         return process.stdout.strip()
     except subprocess.CalledProcessError:
