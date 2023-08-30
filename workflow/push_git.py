@@ -2,7 +2,7 @@
 import argparse, subprocess, logging
 
 logging.basicConfig(level=logging.INFO,
-                    format="ESC[38;5;20m[commit]\x1b[92m %(message)s\x1b[0m")
+                    format="\x1b[38;5;20m[commit]\x1b[92m %(message)s\x1b[0m")
 
 
 
