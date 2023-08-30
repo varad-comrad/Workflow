@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import pathlib, subprocess, glob, sys, argparse, logging, json, time
+import pathlib, subprocess, argparse, logging, json, time
 
 
 logger = logging.getLogger(__name__)
@@ -10,7 +10,6 @@ console_handler.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(message)s")
 console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
-
 
 def custom_log(level, message):
     if level == logging.INFO:
@@ -23,19 +22,6 @@ def custom_log(level, message):
         formatted_message = message
     logger.log(level, formatted_message)
 
-
-
-# logging.basicConfig(level=logging.INFO, # for "[running] {command}" part
-#                     format="\x1b[38;5;20m[Running]\x1b[92m %(message)s\x1b[0m")
-
-# logging.basicConfig(level=logging.WARNING, # for "[Done] exited with code=? in ? seconds" part 
-#                     format="\033[38;5;20m[Done]\x1b[92m %(message)s\x1b[0m")
-
-# logging.basicConfig(level=logging.ERROR, # for error messages
-#                     format="\033[31m[ERROR]\x1b[92m %(message)s\x1b[0m")
-
-# logging.basicConfig(level=logging.DEBUG, # for debug messages
-#                     format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
 
 def run(path:pathlib.Path):
     if path.is_file():
@@ -110,8 +96,6 @@ def debug_dir(path: pathlib.Path):
         to_format.append(path.name)
     return command, path
 
-    pass
-
 def test_code(path: pathlib.Path):
     data: dict
     command: str
@@ -129,7 +113,6 @@ def test_code(path: pathlib.Path):
     if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
         to_format.append(path.name)
     return command, path
-
 
 def bench_code(path: pathlib.Path):
     data: dict
@@ -149,8 +132,6 @@ def bench_code(path: pathlib.Path):
         to_format.append(path.name)
     return command, path
 
-    pass
-
 def build_code(path: pathlib.Path):
     if path.is_file():
         return build_file(path)
@@ -161,23 +142,19 @@ def build_file(path: pathlib.Path):
     extension = path.name.split('.')[-1]
     data: dict
     with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
-        data = json.load(file)['FileExecutorMap']
+        data = json.load(file)['FileBuildMap']
     if extension not in data.keys():
         raise ValueError(f'No runner found for extension {extension}')
     command: str = data[extension]
     to_format: list[str]
 
     if extension in ['c', 'cpp']:
-        to_format = [path.name, path.name.split(
-            '.')[0], path.name.split('.')[0]]
-    elif extension in ['rs', 'java', 'kt']:
         to_format = [path.name, path.name.split('.')[0]]
     else:
         to_format = [path.name]
 
     command = command.format(*to_format)
     return command, path
-
 
 def build_dir(path: pathlib.Path):
     data: dict
@@ -197,13 +174,11 @@ def build_dir(path: pathlib.Path):
         to_format.append(path.name)
     return command, path
 
-
 def executor(command: str, path: pathlib.Path):
     code = 0
     try:
         custom_log(logging.INFO,f'cd {path.parent.absolute()} && {command}')
         t0 = time.perf_counter()
-        # stderr and stdout
         result = subprocess.run(command, cwd=path.parent.absolute(
         ), shell=True, capture_output=True, text=True)
         output = result.stdout.strip()

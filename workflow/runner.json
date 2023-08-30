@@ -30,11 +30,11 @@
     },
      
     "DirectoryTestMap": {
-
+        "cargo.toml": "cargo test"
     },
 
     "DirectoryBenchMap": {
-        
+        "cargo.toml": "cargo bench"
     },
     
     "DirectoryDebugMap": {
@@ -42,11 +42,23 @@
     },
     
     "FileBuildMap": {
-    
+        "py": "python {}",
+        "c": "gcc {} -o {}",
+        "cpp": "g++ {} -o {}",
+        "rs": "rustc {}",
+        "java": "javac {}",
+        "kt": "kotlinc {}",
+        "kts": "kotlin -script {}",
+        "nim": "nim compile --verbosity:0 --hints:off {}",
+        "csproj": "dotnet run --project {}",
+        "go": "go run {}",
+        "zig": "zig run {}",
+        "v": "v run {}"
     },
     
     "DirectoryBuildMap": {
-    
+        "cargo.toml": "cargo build",
+        "main.go": "go build"
     }
 }
 
