@@ -24,7 +24,9 @@ def main():
     args = parser.parse_args()
     
     current_branch = subprocess.run(
-        'git branch', shell=True, capture_output=True, text=True).stdout.split('*')[1].strip()
+        'git branch', shell=True, capture_output=True, text=True).stdout
+    print(current_branch.split('*')[1].strip())
+    current_branch = current_branch.split('*')[1].strip()
     
     if len(args.files) > 0:
 
