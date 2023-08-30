@@ -26,7 +26,7 @@ class Shell(cmd2.Cmd):
     host = subprocess.run('hostname', shell=True,
                           capture_output=True, text=True).stdout.strip()
     
-    prompt = f"{colorama.Fore.GREEN}{user}@{colorama.Fore.GREEN}{host}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{shortened_path(path, user)}{colorama.Style.RESET_ALL}$ "
+    prompt = f"{colorama.Fore.BLUE}{user}@{colorama.Fore.GREEN}{host}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{shortened_path(path, user)}{colorama.Style.RESET_ALL}$ "
 
     def __init__(self, completekey: str = 'tab',
                  stdin: Optional[TextIO] = None,
@@ -93,27 +93,7 @@ class Shell(cmd2.Cmd):
 
     def do_run(self, arg):
         #TODO: Implement a code runner separately
-        path = pathlib.Path('.')
-        lang = ''
-        aux = path
-        for element in path.iterdir():
-            if element.is_dir():
-                if (element / '__main__.py').exists():
-                    aux = element
-                    lang = 'python'
-                #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                elif (element / 'main.rs').exists():
-                    aux = element
-                    lang = 'rust'
-        if lang == 'python' and settings.s['venv_manager'] != 'poetry':
-            ret = subprocess.run(
-                f'python {aux.absolute()}', shell=True, capture_output=True, text=True).stdout.strip()
-        elif lang == 'python' and settings.s['venv_manager'] == 'poetry':
-            pass  # subprocess.run(['poetry shell', arg], shell=True)
-        else:
-            ret = subprocess.run(
-                arg, shell=True, capture_output=True, text=True).stdout.strip()
-        print(ret)
+        pass
 
     def do_config(self, arg):
         subprocess.run('config.py ' + arg, shell=True)
@@ -142,21 +122,22 @@ class Shell(cmd2.Cmd):
     def do_git(self, arg):
         subprocess.run('git ' + arg, shell=True)
 
-    def do_cd(self, arg):
+    def do_cd(self, arg: str):
         # TODO: Debug and implement the cases where arg is '-' and '~' and '..'
         prev = self.path
-        if arg == '..': # TODO: check for the case where arg is '../../something...'. Check loop implementation (for arg in arg.split('/'))
-            self.path = self.path.absolute().parent
-        elif arg == '-':
-            pass
-        elif arg == '~':
-            pass
-        else:
-            self.path /= arg
+        for argument in arg.split('/'):
+            if argument == '..':
+                self.path = self.path.absolute().parent
+            elif argument == '-':
+                pass
+            elif argument == '~':
+                self.path = pathlib.Path(*pathlib.Path(subprocess.run(
+                    'pwd', shell=True, capture_output=True, text=True).stdout.strip()).absolute().parts[:3]).absolute()
+            else:
+                self.path /= argument
         try:
-            os.chdir(arg)
-            self.prompt = f"{colorama.Fore.GREEN}{self.user}@{colorama.Fore.GREEN}{self.host}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{shortened_path(self.path, self.user)}{colorama.Style.RESET_ALL}$ "
-
+            os.chdir(self.path.absolute())
+            self.prompt = f"{colorama.Fore.BLUE}{self.user}@{colorama.Fore.GREEN}{self.host}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{shortened_path(self.path, self.user)}{colorama.Style.RESET_ALL}$ "
         except FileNotFoundError:
             print(f'No such file or directory: {self.path}')
             self.path = prev
