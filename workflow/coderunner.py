@@ -3,17 +3,39 @@
 import pathlib, subprocess, glob, sys, argparse, logging, json, time
 
 
-logging.basicConfig(level=logging.INFO, # for "[running] {command}" part
-                    format="\x1b[38;5;20m[Running]\x1b[92m %(message)s\x1b[0m")
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(message)s")
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
 
-logging.basicConfig(level=logging.WARNING, # for "[Done] exited with code=? in ? seconds" part 
-                    format="\033[38;5;20m[Done]\x1b[92m %(message)s\x1b[0m")
 
-logging.basicConfig(level=logging.ERROR, # for error messages
-                    format="\033[31m[ERROR]\x1b[92m %(message)s\x1b[0m")
+def custom_log(level, message):
+    if level == logging.INFO:
+        formatted_message = f"\x1b[38;5;20m[Running]\x1b[92m {message}\x1b[0m"
+    elif level == logging.WARNING:
+        formatted_message = f"\033[38;5;20m[Done]\x1b[92m {message}\x1b[0m"
+    elif level == logging.ERROR:
+        formatted_message = f"\033[31m[ERROR]\x1b[92m {message}\x1b[0m"
+    else:
+        formatted_message = message
+    logger.log(level, formatted_message)
 
-logging.basicConfig(level=logging.DEBUG, # for debug messages
-                    format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
+
+
+# logging.basicConfig(level=logging.INFO, # for "[running] {command}" part
+#                     format="\x1b[38;5;20m[Running]\x1b[92m %(message)s\x1b[0m")
+
+# logging.basicConfig(level=logging.WARNING, # for "[Done] exited with code=? in ? seconds" part 
+#                     format="\033[38;5;20m[Done]\x1b[92m %(message)s\x1b[0m")
+
+# logging.basicConfig(level=logging.ERROR, # for error messages
+#                     format="\033[31m[ERROR]\x1b[92m %(message)s\x1b[0m")
+
+# logging.basicConfig(level=logging.DEBUG, # for debug messages
+#                     format="\x1b[92m[%(levelname)s] %(message)s\x1b[0m")
 
 def run(path:pathlib.Path):
     if path.is_file():
@@ -108,7 +130,6 @@ def test_code(path: pathlib.Path):
         to_format.append(path.name)
     return command, path
 
-    pass
 
 def bench_code(path: pathlib.Path):
     data: dict
@@ -180,7 +201,7 @@ def build_dir(path: pathlib.Path):
 def executor(command: str, path: pathlib.Path):
     code = 0
     try:
-        logging.info(f'cd {path.parent.absolute()} && {command}')
+        custom_log(logging.INFO,f'cd {path.parent.absolute()} && {command}')
         t0 = time.perf_counter()
         # stderr and stdout
         result = subprocess.run(command, cwd=path.parent.absolute(
@@ -201,8 +222,8 @@ def executor(command: str, path: pathlib.Path):
             ansi_code = '\033[35m'
         else:
             ansi_code = '\033[31m'
-        logging.warning(
-            f"exited with {ansi_code}{code=}{ansi_code3} in {ansi_code2}{(time.perf_counter() - t0)}{ansi_code3} seconds")
+        custom_log(logging.WARNING,
+            f"exited with {ansi_code}{code=}{ansi_code3} in {ansi_code2}{(time.perf_counter() - t0):.3f}{ansi_code3} seconds")
 
 def parse_args():
     parser = argparse.ArgumentParser()
