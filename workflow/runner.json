@@ -25,7 +25,7 @@
         "main.py": "python {}",
         "manage.py": "python manage.py runserver",
         "pyproject.toml": "poetry run python {}",
-        "cargo.toml": "cargo run {}"
+        "cargo.toml": "cargo run"
     },
      
     "DirectoryTestMap": {

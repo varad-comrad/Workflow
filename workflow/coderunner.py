@@ -48,18 +48,39 @@ def run_file(path:pathlib.Path):
         return process.stderr.strip()
 
 def run_dir(path:pathlib.Path):
-    pass
+    data: dict
+    command: str
+    aux_file: str
+    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
+        data = json.load(file)['DirectoryExecutorMap']
+    for element in path.iterdir():
+        if (aux_file := element.name) in data.keys():
+            command = data[aux_file]
+            break
+    else:
+        raise ValueError("innapropriate")
 
-def run_code(path: pathlib.Path):
-    if any((element.endswith('__main__.py') or element.endswith('main.py')) for element in glob.iglob(path.name, recursive=True)):
-        subprocess.run(f'python {path.name}', shell=True)
-    elif pathlib.Path('pyproject.toml') in path.iterdir():
-        subprocess.run(f'poetry {path.name}', shell=True)
-    elif pathlib.Path('cargo.toml') in path.iterdir():
-        subprocess.run(f'cargo run', shell=True)    
-    # elif pathlib.Path('cargo.toml') in path.iterdir():
-    #     subprocess.run(f'cargo run', shell=True)
-    return 
+    to_format: list[str]
+    if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
+        to_format.append(path.name)
+
+    process = subprocess.run(
+        f'cd {path.parent.absolute()} && ' + command, shell=True, capture_output=True, text=True)
+    try:
+        return process.stdout.strip()
+    except subprocess.CalledProcessError:
+        return process.stderr.strip()
+
+# def run_code(path: pathlib.Path):
+#     if any((element.endswith('__main__.py') or element.endswith('main.py')) for element in glob.iglob(path.name, recursive=True)):
+#         subprocess.run(f'python {path.name}', shell=True)
+#     elif pathlib.Path('pyproject.toml') in path.iterdir():
+#         subprocess.run(f'poetry {path.name}', shell=True)
+#     elif pathlib.Path('cargo.toml') in path.iterdir():
+#         subprocess.run(f'cargo run', shell=True)    
+#     # elif pathlib.Path('cargo.toml') in path.iterdir():
+#     #     subprocess.run(f'cargo run', shell=True)
+#     return 
 
 def debug_code():
     pass
@@ -74,11 +95,11 @@ def build_code():
     pass
 
 
-def runner():
-    path = pathlib.Path(sys.argv[1])
-    ret = run_code(path)
-    print('\n' * 3 + 'Code returned with exit code ' + ret)
-    return ret # exit code
+# def runner():
+#     path = pathlib.Path(sys.argv[1])
+#     ret = run_code(path)
+#     print('\n' * 3 + 'Code returned with exit code ' + ret)
+#     return ret # exit code
 
 def parse_args():
     parser = argparse.ArgumentParser()
