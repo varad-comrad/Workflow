@@ -41,7 +41,6 @@ def run_file(path:pathlib.Path):
         to_format = [path.name]
 
     command = command.format(*to_format)
-    code = 0
     return command, path
 
 def run_dir(path:pathlib.Path):
@@ -62,17 +61,121 @@ def run_dir(path:pathlib.Path):
         to_format.append(path.name)
     return command, path
 
-def debug_code():
+def debug_code(path: pathlib.Path):
+    if path.is_file():
+        return debug_file(path)
+    else:
+        return debug_dir(path)
+
+def debug_file(path: pathlib.Path):
     pass
 
-def test_code():
+def debug_dir(path: pathlib.Path):
+    data: dict
+    command: str
+    aux_file: str
+    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
+        data = json.load(file)['DirectoryDebugMap']
+    for element in path.iterdir():
+        if (aux_file := element.name) in data.keys():
+            command = data[aux_file]
+            break
+    else:
+        raise ValueError("innapropriate")
+
+    to_format: list[str]
+    if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
+        to_format.append(path.name)
+    return command, path
+
     pass
 
-def bench_code():
+def test_code(path: pathlib.Path):
+    data: dict
+    command: str
+    aux_file: str
+    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
+        data = json.load(file)['DirectoryTestMap']
+    for element in path.iterdir():
+        if (aux_file := element.name) in data.keys():
+            command = data[aux_file]
+            break
+    else:
+        raise ValueError("innapropriate")
+
+    to_format: list[str]
+    if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
+        to_format.append(path.name)
+    return command, path
+
     pass
 
-def build_code():
+def bench_code(path: pathlib.Path):
+    data: dict
+    command: str
+    aux_file: str
+    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
+        data = json.load(file)['DirectoryBenchMap']
+    for element in path.iterdir():
+        if (aux_file := element.name) in data.keys():
+            command = data[aux_file]
+            break
+    else:
+        raise ValueError("innapropriate")
+
+    to_format: list[str]
+    if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
+        to_format.append(path.name)
+    return command, path
+
     pass
+
+def build_code(path: pathlib.Path):
+    if path.is_file():
+        return build_file(path)
+    else:
+        return build_dir(path)
+
+def build_file(path: pathlib.Path):
+    extension = path.name.split('.')[-1]
+    data: dict
+    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
+        data = json.load(file)['FileExecutorMap']
+    if extension not in data.keys():
+        raise ValueError(f'No runner found for extension {extension}')
+    command: str = data[extension]
+    to_format: list[str]
+
+    if extension in ['c', 'cpp']:
+        to_format = [path.name, path.name.split(
+            '.')[0], path.name.split('.')[0]]
+    elif extension in ['rs', 'java', 'kt']:
+        to_format = [path.name, path.name.split('.')[0]]
+    else:
+        to_format = [path.name]
+
+    command = command.format(*to_format)
+    return command, path
+
+
+def build_dir(path: pathlib.Path):
+    data: dict
+    command: str
+    aux_file: str
+    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
+        data = json.load(file)['DirectoryBuildMap']
+    for element in path.iterdir():
+        if (aux_file := element.name) in data.keys():
+            command = data[aux_file]
+            break
+    else:
+        raise ValueError("innapropriate")
+
+    to_format: list[str]
+    if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
+        to_format.append(path.name)
+    return command, path
+
 
 def executor(command: str, path: pathlib.Path):
     code = 0
@@ -101,12 +204,6 @@ def executor(command: str, path: pathlib.Path):
         logging.warning(
             f"exited with {ansi_code}{code=}{ansi_code3} in {ansi_code2}{(time.perf_counter() - t0)}{ansi_code3} seconds")
 
-# def runner():
-#     path = pathlib.Path(sys.argv[1])
-#     ret = run_code(path)
-#     print('\n' * 3 + 'Code returned with exit code ' + ret)
-#     return ret # exit code
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('args', type=str, default='.')
@@ -121,7 +218,6 @@ def parse_args():
     return parsed_args
 
 def main():
-    #TODO: refactor code. return statement are not necessary
     parsed_args = parse_args()
     args = pathlib.Path(parsed_args.args)
     
