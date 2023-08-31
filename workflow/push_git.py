@@ -14,9 +14,6 @@ def branch_exists(branch: str) -> bool:
         'git branch', cwd='.', shell=True, capture_output=True, text=True).stdout.strip().splitlines()
     aux = [filtering(line) for line in lines]
     return branch in aux
-    #     return ''
-    # else:
-    #     return '-b'
 
 def stash_and_checkout(message, branch):
     subprocess.run(
@@ -26,7 +23,7 @@ def stash_and_checkout(message, branch):
 def git_push(branch):
     subprocess.run(f'git push -u origin {branch}', cwd='.', shell=True)
 
-def git_add(files=[]):
+def git_add(files):
     if len(files) > 0:
         subprocess.run(f'git add {" ".join(files)}', cwd='.', shell=True)
     else:
@@ -50,9 +47,10 @@ def main():
         'git branch', shell=True, capture_output=True, text=True).stdout.split('*')[1].strip().split('\n')[0]
     if branch_exists(args.branch):
         stash_and_checkout(args.args[0], args.branch)
-        commit_changes(args.args[0], args.files)
+        commit_changes(args.args[0], args.files or [])
         git_push(args.branch)
         return
+    
     commit_changes(args.args[0], args.files)
     extension = '-b' if not branch_exists(args.branch) else ''
     if args.branch:
