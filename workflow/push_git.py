@@ -43,12 +43,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('args', nargs=1, type=str)
     parser.add_argument('-b' ,'--branch', default='')
-    parser.add_argument('-f' ,'--files', default='', nargs='*', type=str)
+    parser.add_argument('-f' ,'--files', default=[], nargs='*', type=str)
     args = parser.parse_args()
     
     current_branch = subprocess.run(
         'git branch', shell=True, capture_output=True, text=True).stdout.split('*')[1].strip().split('\n')[0]
-    print(args.args[0])
     if branch_exists(args.branch):
         stash_and_checkout(args.args[0], args.branch)
         commit_changes(args.args[0], args.files)
