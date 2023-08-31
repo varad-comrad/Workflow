@@ -15,14 +15,6 @@ def branch_exists(branch: str) -> bool:
     # else:
     #     return '-b'
 
-def commit_changes(message, files=None):
-    if files:
-        raise ValueError("Cannot commit specific files on existing different branch. Include all files on commit history")
-    subprocess.run(f'git add .', cwd='.', shell=True)
-    subprocess.run(
-        f'git checkout {message}', cwd='.', shell=True)
-
-
 def stash(message):
     subprocess.run(f'git stash save "stashed {message}"', cwd='.', shell=True)
     pass
@@ -43,8 +35,10 @@ def git_add(files):
     
 def git_commit(message):
     subprocess.run(f"git commit -m '{message}'",cwd='.', shell=True)
-    
 
+def commit_changes(message, files=None):
+    git_add(files or [])
+    git_commit(message)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -57,12 +51,11 @@ def main():
         'git branch', shell=True, capture_output=True, text=True).stdout.split('*')[1].strip().split('\n')[0]
     
     if branch_exists(args.branch):
-        commit_changes(args.args[0], args.files)
         stash(args.args)
         unstash_and_checkout(args.args)
         git_push(args.branch)
         return
-    
+    commit_changes(args.args[0], args.files)
     git_add(args.files)
     git_commit(args.args[0])
     extension = '-b' if not branch_exists(args.branch) else ''
