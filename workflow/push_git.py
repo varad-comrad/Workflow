@@ -32,7 +32,7 @@ def git_add(files):
 def git_commit(message):
     subprocess.run(f"git commit -m '{message}'",cwd='.', shell=True)
 
-def commit_changes(message, files=None):
+def commit_changes(message, files=[]):
     git_add(files)
     git_commit(message)
 
@@ -61,7 +61,6 @@ def main():
 
     logging.info(f"Committing on branch {current_branch}")
     
-
 
 if __name__ == '__main__':
     main()
