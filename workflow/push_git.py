@@ -49,6 +49,7 @@ def main():
         stash_and_checkout(args.args[0], args.branch)
         commit_changes(args.args[0], args.files or [])
         git_push(args.branch)
+        logging.info(f"Committing on branch {args.branch}")
         return
     
     commit_changes(args.args[0], args.files or [])
