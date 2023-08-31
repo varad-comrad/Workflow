@@ -48,9 +48,8 @@ def main():
     
     current_branch = subprocess.run(
         'git branch', shell=True, capture_output=True, text=True).stdout.split('*')[1].strip().split('\n')[0]
-    
+    print(args.args[0])
     if branch_exists(args.branch):
-        breakpoint()
         stash_and_checkout(args.args[0], args.branch)
         commit_changes(args.args[0], args.files)
         git_push(args.branch)
