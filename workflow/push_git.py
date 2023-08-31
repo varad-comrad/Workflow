@@ -13,7 +13,7 @@ def branch_exists(branch: str) -> bool:
     lines = subprocess.run(
         'git branch', cwd='.', shell=True, capture_output=True, text=True).stdout.strip().splitlines()
     aux = [filtering(line) for line in lines]
-    return ('* ' + branch) in aux or branch in aux
+    return branch in aux
     #     return ''
     # else:
     #     return '-b'
