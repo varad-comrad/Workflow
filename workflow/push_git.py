@@ -58,11 +58,11 @@ def main():
     commit_changes(args.args[0], args.files)
     extension = '-b' if not branch_exists(args.branch) else ''
     git_push(current_branch, extension)
-    if args.branch:
-        current_branch = args.branch
-        subprocess.run(f'git checkout {extension} {args.branch} && git push -u origin {current_branch}', cwd='.', shell=True)
-    else:
-        subprocess.run(f'git push -u origin {current_branch}', cwd='.', shell=True)
+    # if args.branch:
+    #     current_branch = args.branch
+    #     subprocess.run(f'git checkout {extension} {args.branch} && git push -u origin {current_branch}', cwd='.', shell=True)
+    # else:
+    #     subprocess.run(f'git push -u origin {current_branch}', cwd='.', shell=True)
 
     logging.info(f"Committing on branch {current_branch}")
     
