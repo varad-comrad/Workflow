@@ -56,8 +56,6 @@ def main():
         git_push(args.branch)
         return
     commit_changes(args.args[0], args.files)
-    git_add(args.files)
-    git_commit(args.args[0])
     extension = '-b' if not branch_exists(args.branch) else ''
     git_push(current_branch, extension)
     if args.branch:
