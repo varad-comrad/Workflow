@@ -19,7 +19,7 @@ def shortened_path(path: pathlib.Path, user: str):
 class Shell(cmd2.Cmd):
 
     path = pathlib.Path('.')
-
+    prev = pathlib.Path('.')
     user = subprocess.run('whoami', shell=True,
                           capture_output=True, text=True).stdout.strip()
     
@@ -123,13 +123,13 @@ class Shell(cmd2.Cmd):
         subprocess.run('git ' + arg, shell=True)
 
     def do_cd(self, arg: str):
-        # TODO: Debug and implement the cases where arg is '-' and '~' and '..'
-        prev = self.path
+        # TODO: Debug and implement the case where arg is '-'
+        prev = self.path.absolute()
         for argument in arg.split('/'):
             if argument == '..':
                 self.path = self.path.absolute().parent
             elif argument == '-':
-                pass
+                self.path = self.prev.absolute()
             elif argument == '~':
                 self.path = pathlib.Path(*pathlib.Path(subprocess.run(
                     'pwd', shell=True, capture_output=True, text=True).stdout.strip()).absolute().parts[:3]).absolute()
@@ -138,6 +138,8 @@ class Shell(cmd2.Cmd):
         try:
             os.chdir(self.path.absolute())
             self.prompt = f"{colorama.Fore.BLUE}{self.user}@{colorama.Fore.GREEN}{self.host}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{shortened_path(self.path, self.user)}{colorama.Style.RESET_ALL}$ "
+            self.prev = prev.absolute()
+            print(prev.absolute())
         except FileNotFoundError:
             print(f'No such file or directory: {self.path}')
             self.path = prev
