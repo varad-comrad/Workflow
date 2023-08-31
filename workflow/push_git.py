@@ -61,6 +61,7 @@ def main():
 
     logging.info(f"Committing on branch {current_branch}")   
 
+
 if __name__ == '__main__':
     main()
 
