@@ -92,8 +92,7 @@ class Shell(cmd2.Cmd):
 
 
     def do_run(self, arg):
-        #TODO: Implement a code runner separately
-        pass
+        subprocess.run('coderunner.py ' + arg, shell=True)
 
     def do_config(self, arg):
         subprocess.run('config.py ' + arg, shell=True)
@@ -123,13 +122,13 @@ class Shell(cmd2.Cmd):
         subprocess.run('git ' + arg, shell=True)
 
     def do_cd(self, arg: str):
-        # TODO: Debug and implement the case where arg is '-'
         prev = self.path.absolute()
         for argument in arg.split('/'):
             if argument == '..':
                 self.path = self.path.absolute().parent
             elif argument == '-':
                 self.path = self.prev.absolute()
+                print(prev.absolute())
             elif argument == '~':
                 self.path = pathlib.Path(*pathlib.Path(subprocess.run(
                     'pwd', shell=True, capture_output=True, text=True).stdout.strip()).absolute().parts[:3]).absolute()
@@ -139,7 +138,6 @@ class Shell(cmd2.Cmd):
             os.chdir(self.path.absolute())
             self.prompt = f"{colorama.Fore.BLUE}{self.user}@{colorama.Fore.GREEN}{self.host}{colorama.Fore.LIGHTBLUE_EX}:{colorama.Fore.CYAN}{shortened_path(self.path, self.user)}{colorama.Style.RESET_ALL}$ "
             self.prev = prev.absolute()
-            print(prev.absolute())
         except FileNotFoundError:
             print(f'No such file or directory: {self.path}')
             self.path = prev
@@ -147,8 +145,14 @@ class Shell(cmd2.Cmd):
     def do_ls(self, arg):
         subprocess.run('ls ' + arg, shell=True)
 
-    def do_man(self, arg):
-        pass
+    def do_cp(self, arg):
+        subprocess.run('cp ' + arg, shell=True)
+    
+    def do_mv(self, arg):
+        subprocess.run('mv ' + arg, shell=True)
+    
+    def do_nick(self, arg: str) -> None:
+        subprocess.run(f'alias.py {arg}', shell=True)
 
     def do_python(self, arg):
         subprocess.run('python ' + arg, shell=True)
@@ -162,25 +166,35 @@ class Shell(cmd2.Cmd):
     def do_cmake(self, arg):
         subprocess.run('cmake ' + arg, shell=True)
 
-    def do_gcc(self, arg):
+    def do_gcc(self, arg: str) -> None:
         if re.findall(r'.*\.c\b', arg):
-            print('gcc')
             subprocess.run('gcc ' + arg, shell=True)
         else:
-            print('g++')
             subprocess.run('g++ ' + arg, shell=True)
+
+    def do_go(self, arg):
+        subprocess.run('go ' + arg, shell=True)
+
+    def do_zig(self, arg):
+        subprocess.run('zig ' + arg, shell=True)
 
     def do_gpp(self, arg):
         subprocess.run('g++ ' + arg, shell=True)
 
     def do_javac(self, arg):
         subprocess.run('javac ' + arg, shell=True)
+
+    def do_kotlinc(self, arg):
+        subprocess.run('kotlinc ' + arg, shell=True)
     
     def do_java(self, arg):
         subprocess.run('java ' + arg, shell=True)
     
-    def do_maven(self, arg):
-        subprocess.run('maven ' + arg, shell=True)
+    def do_kotlin(self, arg):
+        subprocess.run('kotlin ' + arg, shell=True)
+    
+    def do_mvn(self, arg):
+        subprocess.run('mvn ' + arg, shell=True)
 
     def do_gradle(self, arg):
         subprocess.run('gradle ' + arg, shell=True)

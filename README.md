@@ -13,7 +13,7 @@ cd Workflow
 python workflow/setup.py
 ```
 
-Now, you can delete the cloned repo and restart the terminal, and workflow will already be functioning properly
+After finished customizing workflow, you can delete the cloned repo and restart the terminal, and workflow will already be functioning properly
 
 ## USAGE (as of now):
 - Calling 'workflow' by itself will create a new workflow shell, where all commands can be executed
@@ -26,13 +26,14 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 
 ## TODO:
 
-- Develop coderunner.py
 - Include code builder, code tester and code benchmarker in coderunner.py
+- Auto-install cmd2 and colorama
 - Debug auto-installation of pyenv
 - Finish poetry management in pyproj.py
-- Debug shell.py methods
+- Debug shell.py methods (90% done)
 - Syntax highlighting for shell.py commands
 - Further develop project creation through their kind (data science, web app, etc)
+- Documentation
 
 ## FUTURE:
 
@@ -42,7 +43,7 @@ Now, you can delete the cloned repo and restart the terminal, and workflow will 
 - Study possibility of integration with docker
 - Auto-installation of a lot of things (conda, docker, make, cmake, etc)
 
-Longer Future: explore possibilitites like AI helper, integration with other CLI tools, etc.
+Longer Future: explore possibilitites like AI helper, integration with other CLI tools (Terraform, Ansible), etc.
 
 ## REQUIREMENTS:
 
@@ -50,7 +51,7 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 - Any Linux Distro that supports zsh, bash, dash, fish, ksh, csh or tcsh<!--.  If you're still using other low tier OS, do yourself a favor  -->
 - cmd2 Python library (```pip install cmd2```)
 - colorama Python library (```pip install colorama```)
-- Python3.10+
+- Python3.11+
 
 ## DOCUMENTATION: 
 ### TBA
