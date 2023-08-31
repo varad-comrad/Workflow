@@ -59,8 +59,7 @@ def main():
     else:
         subprocess.run(f'git push -u origin {current_branch}', cwd='.', shell=True)
 
-    logging.info(f"Committing on branch {current_branch}")
-    
+    logging.info(f"Committing on branch {current_branch}")   
 
 if __name__ == '__main__':
     main()
