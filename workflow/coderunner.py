@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 
-import pathlib, subprocess, argparse, logging, json, time
+import pathlib, subprocess, argparse, logging, json, time, enum
+
+class Mode(enum.Enum):
+    RUN = 'Executor'
+    BUILD = 'Build'
+    TEST = 'Test'
+    BENCH = 'Bench'
+    DEBUG = 'Debug'
 
 
 logger = logging.getLogger(__name__)
@@ -22,6 +29,32 @@ def custom_log(level, message):
         formatted_message = message
     logger.log(level, formatted_message)
 
+def init_file(path: pathlib.Path, mode: Mode):
+    arg = 'File' + mode.value + 'Map'
+    extension = path.name.split('.')[-1]
+    data: dict
+    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
+        data = json.load(file)[arg]
+    if extension not in data.keys():
+        raise ValueError(f'No runner found for extension {extension}')
+    command: str = data[extension]
+    return command, path, extension
+
+def init_dir(path: pathlib.Path, mode: Mode):
+    arg = 'Directory' + mode.value + 'Map'
+    data: dict
+    command: str
+    aux_file: str
+    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
+        data = json.load(file)[arg]
+    for element in path.iterdir():
+        if (aux_file := element.name) in data.keys():
+            command = data[aux_file]
+            break
+    else:
+        raise ValueError("innapropriate")
+    return command, path, aux_file
+
 
 def run(path:pathlib.Path):
     if path.is_file():
@@ -31,15 +64,9 @@ def run(path:pathlib.Path):
     
 
 def run_file(path:pathlib.Path):
-    extension = path.name.split('.')[-1]
-    data: dict
-    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
-        data = json.load(file)['FileExecutorMap']
-    if extension not in data.keys():
-        raise ValueError(f'No runner found for extension {extension}')
-    command: str = data[extension]
-    to_format: list[str]
+    command, _, extension = init_file(path, Mode.RUN)
     
+    to_format: list[str]
     if extension in ['c', 'cpp']:
         to_format = [path.name, path.name.split(
             '.')[0], path.name.split('.')[0]]        
@@ -52,21 +79,14 @@ def run_file(path:pathlib.Path):
     return command, path
 
 def run_dir(path:pathlib.Path):
-    data: dict
-    command: str
-    aux_file: str
-    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
-        data = json.load(file)['DirectoryExecutorMap']
-    for element in path.iterdir():
-        if (aux_file := element.name) in data.keys():
-            command = data[aux_file]
-            break
-    else:
-        raise ValueError("innapropriate")
-
-    to_format: list[str]
-    if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
+    command, _, aux_file = init_dir(path, Mode.RUN)
+    
+    to_format: list[str] = []
+    if aux_file in ['__main__.py']:
         to_format.append(path.name)
+    elif aux_file in ['main.py']:
+        to_format.append(path / aux_file)
+    command = command.format(*to_format)
     return command, path
 
 def debug_code(path: pathlib.Path):
@@ -76,58 +96,28 @@ def debug_code(path: pathlib.Path):
         return debug_dir(path)
 
 def debug_file(path: pathlib.Path):
-    pass
+    command, _, extension = init_file(path, Mode.DEBUG)
 
 def debug_dir(path: pathlib.Path):
-    data: dict
-    command: str
-    aux_file: str
-    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
-        data = json.load(file)['DirectoryDebugMap']
-    for element in path.iterdir():
-        if (aux_file := element.name) in data.keys():
-            command = data[aux_file]
-            break
-    else:
-        raise ValueError("innapropriate")
-
-    to_format: list[str]
+    command, _, aux_file = init_dir(path, Mode.DEBUG)
+    
+    to_format: list[str] = []
     if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
         to_format.append(path.name)
     return command, path
 
 def test_code(path: pathlib.Path):
-    data: dict
-    command: str
-    aux_file: str
-    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
-        data = json.load(file)['DirectoryTestMap']
-    for element in path.iterdir():
-        if (aux_file := element.name) in data.keys():
-            command = data[aux_file]
-            break
-    else:
-        raise ValueError("innapropriate")
-
-    to_format: list[str]
+    command, _, aux_file = init_dir(path, Mode.TEST)
+    
+    to_format: list[str] = []
     if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
         to_format.append(path.name)
     return command, path
 
 def bench_code(path: pathlib.Path):
-    data: dict
-    command: str
-    aux_file: str
-    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
-        data = json.load(file)['DirectoryBenchMap']
-    for element in path.iterdir():
-        if (aux_file := element.name) in data.keys():
-            command = data[aux_file]
-            break
-    else:
-        raise ValueError("innapropriate")
-
-    to_format: list[str]
+    command, _, aux_file = init_dir(path, Mode.BENCH)
+    
+    to_format: list[str] = []
     if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
         to_format.append(path.name)
     return command, path
@@ -139,15 +129,9 @@ def build_code(path: pathlib.Path):
         return build_dir(path)
 
 def build_file(path: pathlib.Path):
-    extension = path.name.split('.')[-1]
-    data: dict
-    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
-        data = json.load(file)['FileBuildMap']
-    if extension not in data.keys():
-        raise ValueError(f'No runner found for extension {extension}')
-    command: str = data[extension]
+    command, _, extension = init_file(path, Mode.BUILD)
+    
     to_format: list[str]
-
     if extension in ['c', 'cpp']:
         to_format = [path.name, path.name.split('.')[0]]
     else:
@@ -157,19 +141,9 @@ def build_file(path: pathlib.Path):
     return command, path
 
 def build_dir(path: pathlib.Path):
-    data: dict
-    command: str
-    aux_file: str
-    with (pathlib.Path(__file__).parent / 'runner.json').open('r') as file:
-        data = json.load(file)['DirectoryBuildMap']
-    for element in path.iterdir():
-        if (aux_file := element.name) in data.keys():
-            command = data[aux_file]
-            break
-    else:
-        raise ValueError("innapropriate")
-
-    to_format: list[str]
+    command, _, aux_file = init_dir(path, Mode.BUILD)
+    
+    to_format: list[str] = []
     if aux_file in ['main.py', '__main__.py', 'pyproject.toml']:
         to_format.append(path.name)
     return command, path
