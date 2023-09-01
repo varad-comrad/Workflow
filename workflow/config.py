@@ -15,7 +15,7 @@ def set_value(key: typing.LiteralString, value: str | int) -> None:
 
 def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument('args', nargs=2, type=str)
+    parser.add_argument('args', nargs='*', type=str)
     parser.add_argument('--show-all', action='store_true', default=False)
     parser.add_argument('--show', type=str, default=False)
     return parser
@@ -39,6 +39,8 @@ def show_arg(arg: str) -> None:
 
 def main():
     parsed_args = make_parser().parse_args()
+    if len(parsed_args.args) > 2:
+        raise ValueError('Too many arguments')
     if parsed_args.show_all:
         show_all_args()
     elif parsed_args.show != '':

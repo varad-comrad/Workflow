@@ -35,18 +35,42 @@ function workon(){
 	eval $p
 }
 
+
 function pythonproj(){
 	msg=$(pyproj.py $@)
     vman=$(echo $msg | tail -n 1)
     eval $vman
 }
 
-function mkproj(){
-	mkproj.py $@
-}
 
 function javaproj(){
 	javaproj.py $@
+}
+
+function cppproj(){
+	cppproj.py $@
+}
+
+function rustproj(){
+	rustproj.py $@
+}
+
+function mkproj(){
+    if [ $1 = 'python' ] | [ $1 = 'py' ]; then
+        shift
+        pythonproj "$@"
+    elif [ $1 = 'rust' ] | [ $1 = 'rs' ]; then
+        shift
+        rustproj "$@"
+    elif [ $1 = 'java' ]; then
+        shift
+        javaproj "$@"
+    elif [ $1 = 'cpp' ] | [ $1 = 'c++' ]; then
+        shift
+        cppproj "$@"
+    else
+        echo "ERROR: Unexpected argument '$1'. Options are 'python', 'java', 'rust', 'cpp'"  
+    fi
 }
 
 function mkdb(){
@@ -113,6 +137,9 @@ function workflow(){
     elif [ $1 = 'mkdir' ]; then
         shift
         mkdirproj "$@" 
+    elif [ $1 = 'mkproj' ]; then
+        shift
+        mkproj "$@" 
     elif [ $1 = 'pythonproj' ]; then
         shift
         pythonproj "$@" 

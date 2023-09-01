@@ -322,6 +322,7 @@ def arg_parser():
 
 def main():
 	# TODO: add conda installation here. Conda init loves breaking bash rc for some reason
+	subprocess.run('pip install colorama cmd2', shell=True)
 	check_pyenv_existence()
 	path = create_workflow_directory()
 	move_directory(pathlib.Path('.') / 'workflow', path)

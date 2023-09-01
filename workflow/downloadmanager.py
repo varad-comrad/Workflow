@@ -15,7 +15,7 @@ def parsed_args():
     parser.add_argument("-l", "--loop", action='store_true', default=False)
     args = parser.parse_args()
     if args.loop and any([args.add_dir, args.rm_dir, args.config, args.delete_config]):
-        raise ValueError()
+        raise ValueError('too many arguments')
     return args
 
 def open_file():

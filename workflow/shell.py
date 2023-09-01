@@ -145,6 +145,9 @@ class Shell(cmd2.Cmd):
     def do_ls(self, arg):
         subprocess.run('ls ' + arg, shell=True)
 
+    def do_man(self, arg):
+        subprocess.run('man ' + arg, shell=True)
+
     def do_cp(self, arg):
         subprocess.run('cp ' + arg, shell=True)
     
