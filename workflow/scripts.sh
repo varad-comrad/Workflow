@@ -51,17 +51,10 @@ function cppproj(){
 	cppproj.py $@
 }
 
-function rustproj(){
-	rustproj.py $@
-}
-
 function mkproj(){
     if [ $1 = 'python' ] | [ $1 = 'py' ]; then
         shift
         pythonproj "$@"
-    elif [ $1 = 'rust' ] | [ $1 = 'rs' ]; then
-        shift
-        rustproj "$@"
     elif [ $1 = 'java' ]; then
         shift
         javaproj "$@"
@@ -69,7 +62,7 @@ function mkproj(){
         shift
         cppproj "$@"
     else
-        echo "ERROR: Unexpected argument '$1'. Options are 'python', 'java', 'rust', 'cpp'"  
+        echo "ERROR: Unexpected argument '$1'. Options are 'python', 'java', 'cpp'"  
     fi
 }
 

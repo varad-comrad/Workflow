@@ -51,9 +51,9 @@
         "kts": "kotlin -script {}",
         "nim": "nim compile --verbosity:0 --hints:off {}",
         "csproj": "dotnet run --project {}",
-        "go": "go run {}",
-        "zig": "zig run {}",
-        "v": "v run {}"
+        "go": "go build {}",
+        "zig": "zig build-exe {}",
+        "v": "v build {}"
     },
     
     "DirectoryBuildMap": {

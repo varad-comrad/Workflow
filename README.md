@@ -27,13 +27,12 @@ After finished customizing workflow and double checking if conda did not break a
 - Include code builder, code tester and code benchmarker in coderunner.py
 - Finish poetry management in pyproj.py
 - Debug shell.py methods (90% done)
-- Syntax highlighting for shell.py commands
 - Further develop project creation through their kind (data science, web app, etc)
+- javaproj.py, cppproj.py
 - Documentation
 
 ## FUTURE:
 
-- In the future, it will be possible to create projects from other languages like Java and Rust
 - Possibly manage .NET/Node projects as well
 - Possibly manage C/C++ projects
 - Study possibility of integration with docker
