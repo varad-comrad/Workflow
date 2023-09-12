@@ -24,7 +24,9 @@ After finished customizing workflow and double checking if conda did not break a
 
 ## TODO:
 
+- Debug mkdirproj.py, config.py and pyproj.py
 - Include code builder, code tester and code benchmarker in coderunner.py
+- Debug -h arg in pyproj.py (possibly shell related)
 - Finish poetry management in pyproj.py
 - Debug shell.py methods (90% done)
 - Further develop project creation through their kind (data science, web app, etc)

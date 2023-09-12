@@ -5,7 +5,13 @@ import argparse, subprocess, pathlib, logging, json, sys
 class JavaProj:
     def __init__(self, parsed_args: argparse.Namespace):
         self.args = parsed_args
-        # self.cmds = [f'cd {self.args.dir}']
+        self.cmds = [f'cd {self.args.dir}']
+
+    def __mvn_generation(self):
+        self.cmds.append('mvn archetype:generate -DgroupId=com.mycompany.app'\
+                       ' -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart'\
+                       ' -DarchetypeVersion=1.4 -DinteractiveMode=false')
+        pass
 
     def __generate_directory_tree(self):
         pass
@@ -15,9 +21,6 @@ class JavaProj:
 
     def __generate_main_package(self):
         pass    
-
-    def __generate_test_package(self):
-        pass
 
     
     pass

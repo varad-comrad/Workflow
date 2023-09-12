@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-import argparse, subprocess, pathlib, settings
+import argparse, subprocess, pathlib, settings, errors
 
 
 def parse_pyproject():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(usage=errors.newproj_error())
     # requires pyenv to manage python versions
     parser.add_argument('-p', '--python-version', type=str)
     
@@ -21,9 +21,9 @@ def parse_pyproject():
 
     parser.add_argument('-d', '--dir', default='.', type=str)
 
-    parser.add_argument('--data-science', action='store_true', default=False)
+    parser.add_argument('-ds','--data-science', action='store_true', default=False, required=False)
 
-    parser.add_argument('--web-dev', action='store_true', default=False)
+    parser.add_argument('-wd','--web-dev', action='store_true', default=False, required=False)
 
     # if user wishes to set new environment. If specified, arguments must be the name of the venv and the path to requirements.txt
     # for pip installation. Second argument is optional. Tool for managing may be conda or poetry or virtualenv.
@@ -196,7 +196,6 @@ class PyProject:
 def main():
     proj = PyProject(parse_pyproject().parse_args()).manage_version().manage_venv().create_project_tree()
     print(' && '.join(proj.cmds))
-    # proj = PyProject(parse_pyproject().parse_args()).choose_venv()
 
 
 if __name__ == '__main__':

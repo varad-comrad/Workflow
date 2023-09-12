@@ -17,7 +17,7 @@ def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument('args', nargs='*', type=str)
     parser.add_argument('--show-all', action='store_true', default=False)
-    parser.add_argument('--show', type=str, default=False)
+    parser.add_argument('--show', type=str, default='')
     return parser
 
 def type_treating(key: str, value: str | int) -> tuple: 

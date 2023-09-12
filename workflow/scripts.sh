@@ -52,17 +52,17 @@ function cppproj(){
 }
 
 function mkproj(){
-    if [ $1 = 'python' ] | [ $1 = 'py' ]; then
+    if [ $1 = 'python' ] || [ $1 = 'py' ]; then
         shift
         pythonproj "$@"
     elif [ $1 = 'java' ]; then
         shift
         javaproj "$@"
-    elif [ $1 = 'cpp' ] | [ $1 = 'c++' ]; then
+    elif [ $1 = 'cpp' ] || [ $1 = 'c++' ]; then
         shift
         cppproj "$@"
     else
-        echo "ERROR: Unexpected argument '$1'. Options are 'python', 'java', 'cpp'"  
+        echo "ERROR: Unexpected argument '$1'. Options are 'python', 'py', 'java', 'cpp', 'c++'"  
     fi
 }
 

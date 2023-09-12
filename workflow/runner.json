@@ -17,7 +17,7 @@
         "v": "v run {}",
         "rb": "ruby {}",
         "sh": "bash {}",
-        "r": "Rscript"
+        "r": "Rscript {}"
     },
      
     "DirectoryExecutorMap": {
@@ -58,7 +58,9 @@
     
     "DirectoryBuildMap": {
         "cargo.toml": "cargo build",
-        "main.go": "go build"
+        "main.go": "go build",
+        "main.cpp": "make {}",
+        "main.c": "make {}"
     }
 }
 
