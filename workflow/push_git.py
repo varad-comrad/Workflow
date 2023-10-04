@@ -41,6 +41,7 @@ def main():
     parser.add_argument('args', nargs=1, type=str)
     parser.add_argument('-b' ,'--branch', default='')
     parser.add_argument('-f' ,'--files', default=[], nargs='*', type=str)
+    parser.add_argument('--clear', default=False, action='store_true')
     args = parser.parse_args()
     
     current_branch = subprocess.run(
@@ -61,6 +62,9 @@ def main():
         subprocess.run(f'git push -u origin {current_branch}', cwd='.', shell=True)
 
     logging.info(f"Committing on branch {current_branch}")   
+
+    if args.clear:
+        subprocess.run(f'clear', cwd='.', shell=True)
 
 
 if __name__ == '__main__':

@@ -22,7 +22,7 @@ def db_parser() -> argparse.ArgumentParser:
 
 class DatabaseCreator:
     def __init__(self, parsed_args: argparse.Namespace) -> None:
-        self._db: str = parsed_args.database
+        self._db: str = parsed_args.dbms
         self._dir: pathlib.Path = pathlib.Path(
             parsed_args.dir)/f'{parsed_args.args[0]}'
         self._dir.mkdir(parents=True)
@@ -64,7 +64,7 @@ class DatabaseCreator:
 
 if __name__ == '__main__':
     args = db_parser().parse_args()
-    if args.password is None and args.database != 'sqlite':
+    if args.password is None and args.dbms != 'sqlite':
         raise ValueError('password must be specified')
     DatabaseCreator(args).create_database()
 
