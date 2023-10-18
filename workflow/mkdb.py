@@ -46,7 +46,9 @@ class DatabaseCreator:
                                                                self._parsed_args.password,
                                                                self._parsed_args.host,
                                                                self._parsed_args.port or dbsettings.databases_ports[self._db], 
-                                                               self._parsed_args.database_name)
+                                                               self._parsed_args.database_name,
+                                                               self._db == 'sqlite',
+                                                               self._db == 'sqlite')
                                                                )
         models.joinpath('__all_models.py').touch()
         with models.joinpath('model_base.py').open('w') as model_base_file:

@@ -6,7 +6,7 @@ from models.model_base import ModelBase
 
 __engine: Engine | None = None
 
-def create_engine(sqlite: bool=False, postgresql: bool=False) -> Engine:
+def create_engine(sqlite: bool=False) -> Engine:
     global __engine
     if __engine:
         return __engine
@@ -15,7 +15,7 @@ def create_engine(sqlite: bool=False, postgresql: bool=False) -> Engine:
         path.parent.mkdir(parents=True, exist_ok=True) 
         conn_str = f'sqlite:///' + str(path)
         __engine = sa.create_engine(url=conn_str, echo=False)
-    elif postgresql:
+    else:
         conn_str = '{}://{}:{}@{}:{}/{}'  # ! variable here
         __engine = sa.create_engine(url=conn_str, echo=False)
     return __engine
@@ -23,7 +23,7 @@ def create_engine(sqlite: bool=False, postgresql: bool=False) -> Engine:
 def create_session() -> Session:
     global __engine
     if not __engine:
-        create_engine() #! variable here
+        create_engine({}) #! variable here
     __session = sessionmaker(__engine, expire_on_commit=False, class_=Session)
     session: Session = __session()
     return session
@@ -32,7 +32,7 @@ def create_session() -> Session:
 def create_tables() -> None:
     global __engine
     if not __engine:
-        create_engine() #! variable here
+        create_engine({}) #! variable here
     import models.__all_models
     ModelBase.metadata.drop_all(__engine)
     ModelBase.metadata.create_all(__engine)

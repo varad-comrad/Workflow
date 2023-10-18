@@ -22,15 +22,17 @@ After finished customizing workflow and double checking if conda did not break a
     - workflow config {args} => config.py {args}
     - workflow new {args} => make_workflow.py {args}
 
-## TODO:
+## TODO Prototype:
 
 - Debug mkdirproj.py, config.py and pyproj.py
-- Complete mkdb.py
 - Include code builder, code tester and code benchmarker in coderunner.py
-- Debug -h arg in pyproj.py (possibly shell related)
-- Finish poetry management in pyproj.py
 - Debug shell.py methods (90% done)
 - Further develop project creation through their kind (data science, web app, etc)
+
+## TODO Phase 1:
+
+- Finish poetry management in pyproj.py
+- Debug -h arg in pyproj.py (possibly shell related)
 - javaproj.py, cppproj.py
 - Documentation
 
@@ -50,5 +52,6 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 - Python3.11+
 
 ## DOCUMENTATION: 
-### TBA
+
+Documentation is yet to exist. It will be accessed through [here](https://github.com/varad-comrad/Workflow/docs)
 

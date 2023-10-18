@@ -67,7 +67,7 @@ function mkproj(){
 }
 
 function mkdb(){
-    mkdb.py $@
+    mkdb.py "$@"
 }
 
 function push_git(){
