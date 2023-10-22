@@ -66,7 +66,7 @@ def parse_project():
     text_editors = ['vscode', 'vim', 'jupyter']
     parser = argparse.ArgumentParser(usage=errors.newproj_error())
     parser.add_argument('-n', '--name',required=True, type=str)
-    parser.add_argument('-t', '--text-editor',required=True, choices=text_editors)
+    parser.add_argument('-t', '--text-editor',default=settings.default_text_editor, choices=text_editors)
     parser.add_argument('-d', '--dir', type=str, default=settings.default_dir)
     parser.add_argument('--new-proj', default=False, action="store_true")
     parser.add_argument('-g','--git', default=False, action="store_true")

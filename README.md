@@ -27,10 +27,10 @@ After finished customizing workflow and double checking if conda did not break a
 - Debug mkdirproj.py, config.py and pyproj.py
 - Include code builder, code tester and code benchmarker in coderunner.py
 - Debug shell.py methods (90% done)
-- Further develop project creation through their kind (data science, web app, etc)
 
 ## TODO Phase 1:
 
+- Further develop project creation through their kind (data science, web app, etc)
 - Finish poetry management in pyproj.py
 - Debug -h arg in pyproj.py (possibly shell related)
 - javaproj.py, cppproj.py
@@ -39,7 +39,6 @@ After finished customizing workflow and double checking if conda did not break a
 ## FUTURE:
 
 - Possibly manage .NET/Node projects as well
-- Possibly manage C/C++ projects
 - Study possibility of integration with docker
 - Auto-installation of a lot of things (conda, docker, make, cmake, etc)
 
@@ -48,7 +47,7 @@ Longer Future: explore possibilitites like AI helper, integration with other CLI
 ## REQUIREMENTS:
 
 
-- Any Linux Distro that supports zsh, bash, dash, fish, ksh, csh or tcsh<!--.  If you're still using other low tier OS, do yourself a favor  -->
+- Any Linux Distro that supports zsh, bash, dash, fish, ksh, csh or tcsh.
 - Python3.11+
 
 ## DOCUMENTATION: 
