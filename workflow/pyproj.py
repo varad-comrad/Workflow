@@ -21,9 +21,9 @@ def parse_pyproject():
 
     parser.add_argument('-d', '--dir', default='.', type=str)
 
-    parser.add_argument('-ds','--data-science', action='store_true', default=False, required=False)
+    parser.add_argument('--data-science', action='store_true', default=False, required=False)
 
-    parser.add_argument('-wd','--web-dev', action='store_true', default=False, required=False)
+    parser.add_argument('--web-dev', action='store_true', default=False, required=False)
 
     # if user wishes to set new environment. If specified, arguments must be the name of the venv and the path to requirements.txt
     # for pip installation. Second argument is optional. Tool for managing may be conda or poetry or virtualenv.

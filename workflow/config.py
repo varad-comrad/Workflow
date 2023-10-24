@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import json, pathlib, argparse, typing
+import json, pathlib, argparse, typing, pprint
 
 # TODO: limit function to predefined keys
 def set_value(key: typing.LiteralString, value: str | int) -> None:
@@ -29,7 +29,7 @@ def show_all_args() -> None:
     path = pathlib.Path(__file__).parent/'settings.json'
     with path.open('r') as file:
         s = json.load(file)
-        print(s)
+        pprint.pprint(s)
 
 def show_arg(arg: str) -> None:
     path = pathlib.Path(__file__).parent/'settings.json'

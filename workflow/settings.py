@@ -12,3 +12,4 @@ if __name__ == 'settings':
     db_password = s['db_password']
     path_to_sqlite = s['path_to_sqlite']
     default_db_host = s['default_db_host']
+    default_text_editor = s.get('default_text_editor', 'vscode')

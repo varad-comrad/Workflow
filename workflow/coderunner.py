@@ -90,13 +90,7 @@ def run_dir(path:pathlib.Path):
     return command, path
 
 def debug_code(path: pathlib.Path):
-    if path.is_file():
-        return debug_file(path)
-    else:
-        return debug_dir(path)
-
-def debug_file(path: pathlib.Path):
-    command, _, extension = init_file(path, Mode.DEBUG)
+    return debug_dir(path)
 
 def debug_dir(path: pathlib.Path):
     command, _, aux_file = init_dir(path, Mode.DEBUG)

@@ -133,7 +133,7 @@ function workflow(){
     elif [ $1 = 'mkproj' ]; then
         shift
         mkproj "$@" 
-    elif [ $1 = 'pythonproj' ]; then
+    elif [ $1 = 'pyproj' ]; then
         shift
         pythonproj "$@" 
     elif  [ $1 = 'mkdb' ]; then

@@ -24,8 +24,7 @@ After finished customizing workflow and double checking if conda did not break a
 
 ## TODO Prototype:
 
-- Debug mkdirproj.py, config.py and pyproj.py
-- Include code builder, code tester and code benchmarker in coderunner.py
+- Debug mkdirproj.py and pyproj.py
 - Debug shell.py methods (90% done)
 
 ## TODO Phase 1:
@@ -42,10 +41,7 @@ After finished customizing workflow and double checking if conda did not break a
 - Study possibility of integration with docker
 - Auto-installation of a lot of things (conda, docker, make, cmake, etc)
 
-Longer Future: explore possibilitites like AI helper, integration with other CLI tools (Terraform, Ansible), etc.
-
 ## REQUIREMENTS:
-
 
 - Any Linux Distro that supports zsh, bash, dash, fish, ksh, csh or tcsh.
 - Python3.11+
