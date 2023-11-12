@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import argparse, subprocess, logging
+import argparse, subprocess, logging, settings
 
 logging.basicConfig(level=logging.INFO,
                     format="\x1b[38;5;20m[commit]\x1b[92m %(message)s\x1b[0m")
@@ -36,16 +36,28 @@ def commit_changes(message, files=[]):
     git_add(files)
     git_commit(message)
 
+def remote_url(url: str):
+    subprocess.run('git remote add origin {}'.format(url), cwd='.', shell=True)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('args', nargs=1, type=str)
     parser.add_argument('-b' ,'--branch', default='')
     parser.add_argument('-f' ,'--files', default=[], nargs='*', type=str)
+    parser.add_argument('--url', default='')
     parser.add_argument('--clear', default=False, action='store_true')
     args = parser.parse_args()
     
-    current_branch = subprocess.run(
-        'git branch', shell=True, capture_output=True, text=True).stdout.split('*')[1].strip().split('\n')[0]
+    current_branch = ''
+    try:
+        current_branch = subprocess.run(
+            'git branch', shell=True, capture_output=True, text=True).stdout.split('*')[1].strip().split('\n')[0]
+    except IndexError:
+        current_branch = settings.default_branch
+
+    if args.url:
+        remote_url(args.url)
+    
     if branch_exists(args.branch):
         stash_and_checkout(args.args[0], args.branch)
         commit_changes(args.args[0], args.files or [])
